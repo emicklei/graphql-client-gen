@@ -7,16 +7,24 @@ var operationsTemplateSrc = `package {{.Package}}
 import (
 	"time"
 	"context"
-	"github.com/shurcooL/graphql"
 )
-var _ = time.Now
+
+var (
+	_ = time.Now
+)
+
+// Example implementation: github.com/shurcooL/graphql
+type clientInterface interface {
+	Mutate(ctx context.Context, m interface{}, variables map[string]interface{}) error
+}
 
 type Client struct {
-	graphqlClient *graphql.Client
+	graphqlClient clientInterface
 }
 
 {{- range .Operations}}
 
+// {{.FunctionName}} is a Mutation. {{.Comment}}
 func (c *Client) {{.FunctionName}}(
 	ctx context.Context,
 	{{- range .Arguments}}
@@ -32,7 +40,7 @@ func (c *Client) {{.FunctionName}}(
 		{{- end}}
 	}
 	err := c.graphqlClient.Mutate(ctx, &m, vars)
-	return m.{{.FunctionName}}.{{.ReturnType}}, err
+	return m.{{.FunctionName}}.{{.ReturnField}}, err
 }
 {{- end }}
 `

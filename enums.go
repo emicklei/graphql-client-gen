@@ -24,7 +24,8 @@ func (g *Generator) handleEnums(all []*ast.Definition) error {
 	}
 	for _, each := range all {
 		ed := EnumData{
-			Name: each.Name,
+			Comment: each.Description,
+			Name:    each.Name,
 		}
 		for _, other := range each.EnumValues {
 			ed.Values = append(ed.Values, other.Name)

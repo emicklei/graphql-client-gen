@@ -6,7 +6,7 @@ var enumsTemplateSrc = `package {{.Package}}
 
 {{- range .Enums}}
 
-// {{.Name}} is an Enum
+// {{.Name}} is an Enum. {{.Comment}}
 type {{.Name}} string {{$enumName := .Name}}
 const (
 {{- range .Values}}

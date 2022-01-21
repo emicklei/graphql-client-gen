@@ -6,16 +6,17 @@ var typeTemplateSrc = `package {{.Package}}
 
 import (
 	"time"
+	"github.com/shurcooL/graphql"
 )
-var _ = time.Now
+var (
+	_ = time.Now
+	_ = graphql.NewClient
+)
 
 {{- range .Types}}
 
-// {{.Name}} is a {{.Kind}}
+// {{.Name}} is a {{.Kind}}. {{.Comment}}
 type {{.Name}} struct {
-	{{- range .EmbeddedTypes}}
-	{{.}}
-	{{- end}}
 	{{- range .Fields}}
 	{{.Name}} {{if .Optional}} *{{else}} {{end}}{{if .IsArray}}[]{{end}}{{.Type}} {{.Tag}}
 	{{- end}}

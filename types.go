@@ -32,15 +32,16 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 		}
 		if each.Kind == ast.Object || each.Kind == ast.InputObject || each.Kind == ast.Interface {
 			td := TypeData{
-				Kind:          string(each.Kind),
-				EmbeddedTypes: each.Interfaces,
-				Name:          each.Name,
+				Comment: each.Description,
+				Kind:    string(each.Kind),
+				Name:    each.Name,
 			}
 			for _, other := range each.Fields {
 				td.Fields = append(td.Fields, FieldData{
+					Comment:  other.Description,
 					Optional: !other.Type.NonNull,
 					Name:     fieldName(other.Name),
-					Type:     other.Type.Name(),
+					Type:     mapScalar(other.Type.Name()),
 					IsArray:  isArray(other.Type),
 					Tag:      fmt.Sprintf("`graphql:\"%s\" json:\"%s\"`", other.Name, other.Name),
 				})

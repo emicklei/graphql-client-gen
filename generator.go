@@ -35,6 +35,18 @@ func (g *Generator) Generate() error {
 			enums = append(enums, each)
 		}
 	}
+	scalars := []*ast.Definition{}
+	for _, each := range doc.Definitions {
+		if each.Kind == ast.Scalar {
+			// filter standards
+			if mapScalar(each.Name) == each.Name {
+				scalars = append(scalars, each)
+			}
+		}
+	}
+	if err := g.handleScalars(scalars); err != nil {
+		return err
+	}
 	if err := g.handleEnums(enums); err != nil {
 		return err
 	}
@@ -53,4 +65,21 @@ func fieldName(s string) string {
 
 func isArray(t *ast.Type) bool {
 	return t.NamedType == ""
+}
+
+// https://github.com/shurcooL/graphql/blob/master/scalar.go
+func mapScalar(name string) string {
+	switch name {
+	case "Boolean":
+		return "bool"
+	case "Float":
+		return "float64"
+	case "ID":
+		return "interface{}"
+	case "Int":
+		return "int32"
+	case "String":
+		return "string"
+	}
+	return name
 }
