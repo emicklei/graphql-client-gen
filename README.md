@@ -2,7 +2,7 @@
 
 ## run
 
-    go run github.com/emicklei/gcg/cmd/gcg -schema test.graphqls -pkg main
+    go run github.com/emicklei/graphql-client-gen/cmd/gcg -schema test.graphqls -pkg main
 	gofmt -w enums.go
 	gofmt -w mutations.go
 	gofmt -w types.go
