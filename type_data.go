@@ -22,6 +22,7 @@ type OperationData struct {
 	Arguments    []Argument
 	ReturnType   string
 	IsArray      bool
+	Tag          string
 }
 
 type TypeData struct {

@@ -1,6 +1,8 @@
 package gcg
 
 import (
+	"bytes"
+	"fmt"
 	"os"
 	"text/template"
 	"time"
@@ -30,10 +32,16 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 			IsArray:      isArray(other.Type),
 			ReturnType:   other.Type.Name(),
 		}
+		// `graphql:"addEmploymentDocument(employmentID: $employmentID, fileID: $fileID, repositoryID: $repositoryID)"`
+		tag := new(bytes.Buffer)
+		fmt.Fprintf(tag, "`graphql:\"%s(", other.Name)
 		for _, arg := range other.Arguments {
+			fmt.Fprintf(tag, "%s: $%s,", arg.Name, arg.Name)
 			od.Arguments = append(od.Arguments, Argument{
 				Name: arg.Name, Type: arg.Type.Name(), IsArray: isArray(arg.Type)})
 		}
+		fmt.Fprintf(tag, "`")
+		od.Tag = tag.String()
 		fd.Operations = append(fd.Operations, od)
 	}
 	return tmpl.Execute(out, fd)
