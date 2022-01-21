@@ -9,14 +9,6 @@ import (
 )
 var _ = time.Now
 
-{{- range .Operations}}
-
-func {{.FunctionName}}()({{if .IsArray}}[]{{end}}{{.ReturnType}},error) {
-
-}
-
-{{- end}}
-
 {{- range .Types}}
 
 // {{.Name}} is a {{.Kind}}
@@ -29,31 +21,4 @@ type {{.Name}} struct {
 	{{- end}}
 }
 {{- end}}
-
-{{- range .Enums}}
-
-// {{.Name}} is an Enum
-type {{.Name}} string {{$enumName := .Name}}
-const (
-{{- range .Values}}
-{{$enumName}}_{{.}} = {{$enumName}}("{{.}}")
-{{- end}}
-)
-{{- end}}
-
-type Boolean bool
-type String string
-type Int int
-type JSON interface{}
-type ID string
-type Duration string
-type IString string
-type FilterArgument string
-type Timestamp time.Time
-type FileContent []byte
-type Date time.Time
-type DateRange struct{}
-type OpaqueQuery string
-type FileID string
-type PartialQuantity string
 `

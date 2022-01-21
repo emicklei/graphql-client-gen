@@ -10,15 +10,18 @@ type FileData struct {
 	Operations []OperationData
 }
 
+type Argument struct {
+	Name    string
+	Type    string
+	IsArray bool
+}
+
 type OperationData struct {
 	Name         string
 	FunctionName string
-	Arguments    []struct {
-		Name string
-		Type string
-	}
-	ReturnType string
-	IsArray    bool
+	Arguments    []Argument
+	ReturnType   string
+	IsArray      bool
 }
 
 type TypeData struct {
