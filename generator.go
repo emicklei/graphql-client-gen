@@ -29,6 +29,11 @@ func (g *Generator) Generate() error {
 			return err
 		}
 	}
+	if each := doc.Definitions.ForName("Query"); each != nil {
+		if err := g.handleQueries(each); err != nil {
+			return err
+		}
+	}
 	enums := []*ast.Definition{}
 	for _, each := range doc.Definitions {
 		if each.Kind == ast.Enum {

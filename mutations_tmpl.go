@@ -18,15 +18,15 @@ type clientInterface interface {
 	Mutate(ctx context.Context, m interface{}, variables map[string]interface{}) error
 }
 
-type Client struct {
-	graphqlClient clientInterface
-}
+var Mutation = mutation{}
+type mutation struct{}
 
 {{- range .Operations}}
 
 // {{.FunctionName}} is a Mutation. {{.Comment}}
-func (c *Client) {{.FunctionName}}(
-	ctx context.Context,
+func (_ mutation) {{.FunctionName}}(
+	graphqlClient clientInterface,
+	ctx context.Context,	
 	{{- range .Arguments}}
 	{{.Name}} {{if .IsArray}}[]{{end}}{{.Type}},{{- end}})({{if .IsArray}}[]{{end}}{{.ReturnType}},error) {
 	var m struct {
@@ -39,7 +39,7 @@ func (c *Client) {{.FunctionName}}(
 		"{{.Name}}": {{.Name}},
 		{{- end}}
 	}
-	err := c.graphqlClient.Mutate(ctx, &m, vars)
+	err := graphqlClient.Mutate(ctx, &m, vars)
 	return m.{{.FunctionName}}.{{.ReturnField}}, err
 }
 {{- end }}

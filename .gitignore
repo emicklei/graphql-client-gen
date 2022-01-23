@@ -1,6 +1,0 @@
-test.go
-test.graphqls
-cmd/gcg/enums.go
-cmd/gcg/types.go
-cmd/gcg/mutations.go
-cmd/gcg/scalars.go

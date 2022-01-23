@@ -27,6 +27,9 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 		if each.Name == "Mutation" {
 			continue
 		}
+		if each.Name == "Query" {
+			continue
+		}
 		if each.Kind == ast.Enum {
 			continue
 		}
@@ -43,7 +46,7 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 					Name:     fieldName(other.Name),
 					Type:     mapScalar(other.Type.Name()),
 					IsArray:  isArray(other.Type),
-					Tag:      fmt.Sprintf("`graphql:\"%s\" json:\"%s\"`", other.Name, other.Name),
+					Tag:      fmt.Sprintf("`graphql:\"%s\" json:\"%s,omitempty\"`", other.Name, other.Name),
 				})
 			}
 			fd.Types = append(fd.Types, td)

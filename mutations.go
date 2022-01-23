@@ -48,7 +48,7 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 			od.Arguments = append(od.Arguments, Argument{
 				Name: arg.Name, Type: mapScalar(arg.Type.Name()), IsArray: isArray(arg.Type)})
 		}
-		fmt.Fprintf(tag, "\"`")
+		fmt.Fprintf(tag, ")\"`")
 		od.Tag = tag.String()
 		fd.Operations = append(fd.Operations, od)
 	}
