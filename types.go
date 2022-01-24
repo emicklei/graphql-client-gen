@@ -54,7 +54,7 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 						Comment: other.Description,
 						Name:    fieldName(other.Name),
 						Type:    "*" + functionType, // result is optional so use pointer
-						Tag:     fmt.Sprintf("`graphql:\"%s()\" json:\"-,inline\"`", other.Name),
+						Tag:     fmt.Sprintf("`graphql:\"%s\" json:\"-,inline\"`", other.Name),
 					})
 				} else {
 					td.Fields = append(td.Fields, FieldData{
