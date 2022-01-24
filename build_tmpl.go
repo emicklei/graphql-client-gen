@@ -22,7 +22,7 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool) {
 	fmt.Printf("%T\n", q)
 	rt := reflect.TypeOf(q)
 	rv := reflect.ValueOf(q)
-	if rt.Kind() == reflect.Pointer {
+	if rt.Kind() == reflect.Ptr {
 		writeQuery(rv.Elem().Interface(), w, indent, inline)
 		return
 	}
@@ -37,7 +37,7 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool) {
 				fmt.Println("inline")
 				// is struct or pointer to struct
 				k := sf.Type
-				if k.Kind() == reflect.Pointer {
+				if k.Kind() == reflect.Ptr {
 					k = k.Elem()
 					fv = fv.Elem()
 				}
@@ -50,7 +50,7 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool) {
 					fmt.Fprintf(w, "\t%s", tag)
 					// is struct or pointer to struct
 					k := sf.Type
-					if k.Kind() == reflect.Pointer {
+					if k.Kind() == reflect.Ptr {
 						k = k.Elem()
 						fv = fv.Elem()
 					}
