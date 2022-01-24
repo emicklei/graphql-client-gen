@@ -9,6 +9,7 @@ import (
 type Generator struct {
 	schemaSource string
 	packageName  string
+	functions    []Function
 }
 
 func NewGenerator(schemaSource string, options ...Option) *Generator {
@@ -56,6 +57,12 @@ func (g *Generator) Generate() error {
 		return err
 	}
 	if err := g.handleTypes(doc); err != nil {
+		return err
+	}
+	if err := g.handleFunctions(); err != nil {
+		return err
+	}
+	if err := g.handleBuildTools(); err != nil {
 		return err
 	}
 	return nil

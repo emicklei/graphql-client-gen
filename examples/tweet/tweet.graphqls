@@ -8,6 +8,8 @@ type Tweet {
     Author: User
     # Views, retweets, likes, etc
     Stats: Stat
+    # First responders
+    Responders(limit:Int!):[User!]
 }
 
 type User {

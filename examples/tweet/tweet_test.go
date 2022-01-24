@@ -3,12 +3,10 @@ package tweet
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"reflect"
 	"testing"
 )
 
-func TestUserQuery(t *testing.T) {
+func TestTweetQuery(t *testing.T) {
 	q := Tweet{
 		ID:   Get.ID,
 		Body: &Get.String,
@@ -19,10 +17,16 @@ func TestUserQuery(t *testing.T) {
 			Views: &Get.Int32,
 			Likes: &Get.Int32,
 		},
+		Responders: &TweetRespondersFunction{
+			//Limit: 10,
+			User: User{
+				ID: Get.ID,
+			},
+		},
 	}
 	data, _ := json.Marshal(q)
 	t.Log(string(data))
-	doReflect(q)
+	t.Log(BuildQuery(q))
 }
 
 func TestTweetMutation(t *testing.T) {
@@ -51,24 +55,4 @@ type mockClient struct{}
 
 func (_ mockClient) Mutate(ctx context.Context, m interface{}, variables map[string]interface{}) error {
 	return nil
-}
-
-func doReflect(q interface{}) {
-	rt := reflect.TypeOf(q)
-	rv := reflect.ValueOf(q)
-	for i := 0; i < rt.NumField(); i++ {
-		fv := rv.Field(i)
-		if !fv.IsZero() {
-			sf := rt.Field(i)
-			fmt.Println(sf.Tag.Get("graphql"))
-			// is struct or pointer to struct
-			k := sf.Type
-			if k.Kind() == reflect.Pointer {
-				k = k.Elem()
-			}
-			if k.Kind() == reflect.Struct {
-				fmt.Println("struct")
-			}
-		}
-	}
 }

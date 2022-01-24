@@ -40,14 +40,32 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 				Name:    each.Name,
 			}
 			for _, other := range each.Fields {
-				td.Fields = append(td.Fields, FieldData{
-					Comment:  other.Description,
-					Optional: !other.Type.NonNull,
-					Name:     fieldName(other.Name),
-					Type:     mapScalar(other.Type.Name()),
-					IsArray:  isArray(other.Type),
-					Tag:      fmt.Sprintf("`graphql:\"%s\" json:\"%s,omitempty\"`", other.Name, other.Name),
-				})
+				// is direct field or query
+				if len(other.Arguments) > 0 {
+					functionType := each.Name + fieldName(other.Name) + "Function"
+					fnc := Function{
+						Type:       functionType,
+						Arguments:  other.Arguments,
+						IsArray:    isArray(other.Type),
+						ReturnType: mapScalar(other.Type.Name()),
+					}
+					g.functions = append(g.functions, fnc)
+					td.Fields = append(td.Fields, FieldData{
+						Comment: other.Description,
+						Name:    fieldName(other.Name),
+						Type:    "*" + functionType, // result is optional so use pointer
+						Tag:     fmt.Sprintf("`graphql:\"%s()\" json:\"-,inline\"`", other.Name),
+					})
+				} else {
+					td.Fields = append(td.Fields, FieldData{
+						Comment:  other.Description,
+						Optional: !other.Type.NonNull,
+						Name:     fieldName(other.Name),
+						Type:     mapScalar(other.Type.Name()),
+						IsArray:  isArray(other.Type),
+						Tag:      fmt.Sprintf("`graphql:\"%s\" json:\"%s,omitempty\"`", other.Name, other.Name),
+					})
+				}
 			}
 			fd.Types = append(fd.Types, td)
 		}

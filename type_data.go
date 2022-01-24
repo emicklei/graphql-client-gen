@@ -9,6 +9,7 @@ type FileData struct {
 	Enums      []EnumData
 	Operations []OperationData
 	Scalars    []ScalarData
+	Functions  []FunctionData
 }
 
 type Argument struct {
@@ -53,4 +54,12 @@ type EnumData struct {
 type ScalarData struct {
 	Comment string
 	Name    string
+}
+
+type FunctionData struct {
+	Comment    string
+	Name       string
+	Fields     []FieldData
+	IsArray    bool
+	ReturnType string
 }
