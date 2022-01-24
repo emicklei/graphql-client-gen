@@ -13,10 +13,10 @@ type Shared struct {
 	Valid bool `graphql:"valid"`
 }
 type Root struct {
-	Name    string  `graphql:"name"`
-	Array1  []Child // no tag
-	Array2  []Child `graphql:"array2"`
-	Shared  `graphql:"shared()"`
+	Shared  `graphql:"shared"` // embedded
+	Name    string             `graphql:"name"`
+	Array1  []Child            // no tag
+	Array2  []Child            `graphql:"array2"`
 	NoValue int
 }
 
@@ -26,11 +26,12 @@ func TestBuildQueryRoot(t *testing.T) {
 		Array2: []Child{
 			{ID: "?"},
 		},
-		Shared: Shared{Valid: true},
+		Shared: Shared{Arg: 42, Valid: true},
 	}
 	q := BuildQuery(r)
+	t.Log("\n", q)
 	sani := strings.ReplaceAll(strings.ReplaceAll(q, "\n", " "), "\t", "")
-	if got, want := sani, "name array2 { id } shared() { valid } "; got != want {
+	if got, want := sani, "shared(arg:42) { valid } name array2 { id } "; got != want {
 		t.Errorf("got [%v]:%T want [%v]:%T", got, got, want, want)
 	}
 }

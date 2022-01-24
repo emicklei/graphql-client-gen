@@ -19,7 +19,6 @@ func BuildQuery(q interface{}) string {
 }
 
 func writeQuery(q interface{}, w io.Writer, indent int, inline bool) {
-	fmt.Printf("%T\n", q)
 	rt := reflect.TypeOf(q)
 	rv := reflect.ValueOf(q)
 	if rt.Kind() == reflect.Ptr {
@@ -30,11 +29,9 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool) {
 		fv := rv.Field(i)
 		if !fv.IsZero() {
 			sf := rt.Field(i)
-			fmt.Println("into field:", sf.Name)
 			tag, ok := sf.Tag.Lookup("graphql")
 			inlineField := sf.Anonymous && !ok
-			if inlineField {
-				fmt.Println("inline")
+			if inlineField { 
 				// is struct or pointer to struct
 				k := sf.Type
 				if k.Kind() == reflect.Ptr {
@@ -42,7 +39,7 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool) {
 					fv = fv.Elem()
 				}
 				if k.Kind() == reflect.Struct {
-					writeStruct(fv.Interface(), w, indent, inlineField)
+					writeQuery(fv.Interface(), w, indent, inlineField)
 				}				
 			} else {
 				// no inline
@@ -73,9 +70,40 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool) {
 }
 
 func writeStruct(structValue interface{}, w io.Writer, indent int, inline bool) {
+	if list := collectionFunctionArgs(structValue); len(list) > 0 {
+		io.WriteString(w, "(")
+		for i, each := range list {
+			if i > 0 {
+				fmt.Fprintf(w, ",")
+			}
+			fmt.Fprintf(w, "%s:%v", each.k, each.v)
+		}
+		io.WriteString(w, ")")
+	}
 	io.WriteString(w, " {\n")
 	io.WriteString(w, strings.Repeat("\t", indent+1))
 	writeQuery(structValue, w, indent+1, inline)
 	io.WriteString(w, "}\n")
+}
+
+type kv struct {
+	k string
+	v interface{}
+}
+
+func collectionFunctionArgs(structValue interface{}) (list []kv) {
+	rt := reflect.TypeOf(structValue)
+	rv := reflect.ValueOf(structValue)
+	for i := 0; i < rt.NumField(); i++ {
+		ft := rt.Field(i)
+		fv := rv.Field(i)
+		if !fv.IsZero() {
+			tag, ok := ft.Tag.Lookup("graphql-function-arg")
+			if ok {
+				list = append(list, kv{k: tag, v: fv.Interface()})
+			}
+		}
+	}
+	return
 }
 `
