@@ -106,4 +106,13 @@ func collectionFunctionArgs(structValue interface{}) (list []kv) {
 	}
 	return
 }
+
+// GraphQLRequest is used to model both a query or a mutation request
+type GraphQLRequest struct {
+	{{- with .Build}}
+	Query         string                  {{.QueryTag}}
+	OperationName string                  {{.OperationNameTag}}
+	Variables     map[string]interface{}  {{.VariablesTag}}
+	{{- end }}
+}
 `

@@ -10,6 +10,7 @@ type FileData struct {
 	Operations []OperationData
 	Scalars    []ScalarData
 	Functions  []FunctionData
+	Build      BuildData
 }
 
 type Argument struct {
@@ -19,14 +20,14 @@ type Argument struct {
 }
 
 type OperationData struct {
-	Comment      string
-	Name         string
-	FunctionName string
-	Arguments    []Argument
-	ReturnType   string
-	ReturnField  string
-	IsArray      bool
-	Tag          string
+	Comment        string
+	Name           string
+	FunctionName   string
+	Arguments      []Argument
+	ReturnType     string
+	ReturnFieldTag string
+	IsArray        bool
+	DataTag        string
 }
 
 type TypeData struct {
@@ -62,4 +63,8 @@ type FunctionData struct {
 	Fields     []FieldData
 	IsArray    bool
 	ReturnType string
+}
+
+type BuildData struct {
+	QueryTag, OperationNameTag, VariablesTag string
 }

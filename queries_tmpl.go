@@ -11,8 +11,4 @@ import (
 var (
 	_ = time.Now
 )
-
-var Query = query{}
-
-type query struct{}
 `

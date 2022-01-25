@@ -20,5 +20,10 @@ func (g *Generator) handleBuildTools() error {
 	if err != nil {
 		return err
 	}
+	fd.Build = BuildData{
+		QueryTag:         "`json:\"query\"`",
+		OperationNameTag: "`json:\"operationName\"`",
+		VariablesTag:     "`json:\"variables\"`",
+	}
 	return tmpl.Execute(out, fd)
 }

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"strings"
 	"text/template"
 	"time"
 
@@ -28,16 +27,17 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 	}
 	for _, other := range each.Fields {
 		rt := mapScalar(other.Type.Name())
-		rttokens := strings.Split(rt, ".")
 		od := OperationData{
-			Comment:      other.Description,
-			Name:         other.Name,
-			FunctionName: strcase.ToCamel(other.Name),
-			IsArray:      isArray(other.Type),
-			ReturnType:   rt,
-			ReturnField:  rttokens[len(rttokens)-1],
+			Comment:        other.Description,
+			Name:           other.Name,
+			FunctionName:   strcase.ToCamel(other.Name),
+			IsArray:        isArray(other.Type),
+			ReturnType:     rt,
+			DataTag:        "",
+			ReturnFieldTag: "",
 		}
-		// `graphql:"addEmploymentDocument(employmentID: $employmentID, fileID: $fileID, repositoryID: $repositoryID)"`
+		// build return field tag
+		// `graphql:"createGrouping(input:$input,pritSheetID:$pritSheetID,repositoryID:$repositoryID)" json:"createGrouping"`
 		tag := new(bytes.Buffer)
 		fmt.Fprintf(tag, "`graphql:\"%s(", other.Name)
 		for i, arg := range other.Arguments {
@@ -48,8 +48,20 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 			od.Arguments = append(od.Arguments, Argument{
 				Name: arg.Name, Type: mapScalar(arg.Type.Name()), IsArray: isArray(arg.Type)})
 		}
+		fmt.Fprintf(tag, ")\" json:\"%s\"`", other.Name)
+		od.ReturnFieldTag = tag.String()
+		// build data field tag
+		// `graphql:"mutation createGrouping($input: GroupingInput!, $pritSheetID: ID!, $repositoryID: ID!)"`
+		tag = new(bytes.Buffer)
+		fmt.Fprintf(tag, "`graphql:\"mutation %s(", other.Name)
+		for i, arg := range other.Arguments {
+			if i > 0 {
+				fmt.Fprintf(tag, ",")
+			}
+			fmt.Fprintf(tag, "$%s: %s", arg.Name, arg.Type.String())
+		}
 		fmt.Fprintf(tag, ")\"`")
-		od.Tag = tag.String()
+		od.DataTag = tag.String()
 		fd.Operations = append(fd.Operations, od)
 	}
 	return tmpl.Execute(out, fd)

@@ -6,41 +6,37 @@ var operationsTemplateSrc = `package {{.Package}}
 
 import (
 	"time"
-	"context"
 )
 
 var (
 	_ = time.Now
 )
 
-// Example implementation: github.com/shurcooL/graphql
-type clientInterface interface {
-	Mutate(ctx context.Context, m interface{}, variables map[string]interface{}) error
-}
-
-var Mutation = mutation{}
-type mutation struct{}
-
 {{- range .Operations}}
 
-// {{.FunctionName}} is a Mutation. {{.Comment}}
-func (_ mutation) {{.FunctionName}}(
-	graphqlClient clientInterface,
-	ctx context.Context,	
-	{{- range .Arguments}}
-	{{.Name}} {{if .IsArray}}[]{{end}}{{.Type}},{{- end}})({{if .IsArray}}[]{{end}}{{.ReturnType}},error) {
-	var m struct {
-		{{.FunctionName}} struct {
-			{{.ReturnType}}
-		} {{.Tag}}
-	}
-	vars := map[string]interface{}{
-		{{- range .Arguments}}
-		"{{.Name}}": {{.Name}},
-		{{- end}}
-	}
-	err := graphqlClient.Mutate(ctx, &m, vars)
-	return m.{{.FunctionName}}.{{.ReturnField}}, err
+// {{.FunctionName}}Mutation is used for both specifying the query and capturing the response. {{.Comment}}
+type {{.FunctionName}}Mutation struct {
+	Data struct {
+		{{.ReturnType}} {{.ReturnFieldTag}}
+	} {{.DataTag}}
 }
+
+// Build returns all the parts to send the HTTP requests
+func (_m {{.FunctionName}}Mutation) Build(
+		{{- range .Arguments}}
+		{{.Name}} {{.Type}}, 
+		{{- end }}
+	) GraphQLRequest { 
+	return GraphQLRequest{
+		Query: BuildQuery(_m),
+		OperationName: "{{.Name}}",
+		Variables: map[string]interface{}{
+			{{- range .Arguments}}
+			"{{.Name}}": {{.Name}},
+			{{- end }}
+		},
+	}
+}
+
 {{- end }}
 `

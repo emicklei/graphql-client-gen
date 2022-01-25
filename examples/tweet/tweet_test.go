@@ -1,7 +1,6 @@
 package tweet
 
 import (
-	"context"
 	"encoding/json"
 	"testing"
 )
@@ -18,7 +17,7 @@ func TestTweetQuery(t *testing.T) {
 			Likes: &Get.Int32,
 		},
 		Responders: &TweetRespondersFunction{
-			//Limit: 10,
+			Limit: 10,
 			User: User{
 				ID: Get.ID,
 			},
@@ -29,10 +28,6 @@ func TestTweetQuery(t *testing.T) {
 	t.Log(BuildQuery(q))
 }
 
-func TestTweetMutation(t *testing.T) {
-	Mutation.CreateTweet(mockClient{}, context.Background(), "body")
-}
-
 var Get = struct {
 	String string
 	ID     interface{}
@@ -41,18 +36,4 @@ var Get = struct {
 	"",
 	0,
 	0,
-}
-
-// Tweet(id: ID!): Tweet
-
-type Kuery struct{}
-
-func (q Kuery) Tweet(id interface{}) (Tweet, error) {
-	return Tweet{}, nil
-}
-
-type mockClient struct{}
-
-func (_ mockClient) Mutate(ctx context.Context, m interface{}, variables map[string]interface{}) error {
-	return nil
 }
