@@ -9,5 +9,9 @@ var scalarsTemplateSrc = `package {{.Package}}
 // {{.Name}} is a Scalar. {{.Comment}}
 type {{.Name}} string
 
+// New{{.Name}} returns a pointer to a {{.Name}} value. 
+// Use type conversion instead e.g. v := {{.Name}}(s) if you need the non-pointer value.
+func New{{.Name}}(s string) *{{.Name}} { v := {{.Name}}(s); return &v }
+
 {{- end}}
 `
