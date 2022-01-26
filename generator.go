@@ -1,6 +1,10 @@
 package gcg
 
 import (
+	"bytes"
+	"fmt"
+	"strings"
+
 	"github.com/iancoleman/strcase"
 	"github.com/vektah/gqlparser/ast"
 	"github.com/vektah/gqlparser/parser"
@@ -94,4 +98,16 @@ func mapScalar(name string) string {
 		return "string"
 	}
 	return name
+}
+
+func formatComment(comment string) string {
+	lines := strings.Split(comment, "\n")
+	if len(lines) <= 1 {
+		return comment
+	}
+	b := new(bytes.Buffer)
+	for _, each := range lines {
+		fmt.Fprintf(b, "\n// %s", each)
+	}
+	return b.String()
 }

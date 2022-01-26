@@ -10,6 +10,7 @@ var functionsTemplateSrc = `package {{.Package}}
 type {{.Name}} struct {
 	// input	
 	{{- range .Fields}}
+	{{- if gt (len .Comment) 0}}{{.Comment}}{{- end}}
 	{{.Name}} {{if .Optional}} *{{else}} {{end}}{{if .IsArray}}[]{{end}}{{.Type}} {{.Tag}}
 	{{- end}}
 	// output

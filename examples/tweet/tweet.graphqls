@@ -1,3 +1,7 @@
+"""
+This is a 
+multine comment
+"""
 type Tweet {
     id: ID!
     # The tweet text. No more than 140 characters!
@@ -9,6 +13,7 @@ type Tweet {
     # Views, retweets, likes, etc
     Stats: Stat
     # First responders
+    # multiline
     Responders(limit:Int!):[User!]
 }
 
@@ -36,9 +41,17 @@ type Notification {
 }
 
 type Meta {
+    """
+    This is a 
+    multine comment
+    """
     count: Int
 }
 
+"""
+This is a 
+multine comment
+"""
 scalar Url
 scalar Date
 
