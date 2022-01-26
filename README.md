@@ -1,15 +1,17 @@
 # gcg - graphql client generator
 
-Generated sources have no foreign dependencies.
+Generated sources have no dependencies outside the standard Go SDK.
 
 ## run
 
-    go run github.com/emicklei/graphql-client-gen/cmd/gcg -schema test.graphqls -pkg main
+    go run github.com/emicklei/graphql-client-gen/cmd/gcg -schema schema.graphqls -pkg main
 	gofmt -w enums.go
 	gofmt -w mutations.go
 	gofmt -w types.go
 	gofmt -w scalars.go
+	gofmt -w queries.go
+	gofmt -w build.go
 
 ## status
 
-experiment
+work in progress

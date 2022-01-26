@@ -21,7 +21,7 @@ type {{.FunctionName}}Mutation struct {
 	} {{.DataTag}}
 }
 
-// Build returns all the parts to send the HTTP requests
+// Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_m {{.FunctionName}}Mutation) Build(
 		{{- range .Arguments}}
 		{{.Name}} {{.Type}}, 

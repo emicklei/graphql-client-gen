@@ -1,7 +1,6 @@
 package tweet
 
 import (
-	"encoding/json"
 	"testing"
 )
 
@@ -23,9 +22,7 @@ func TestTweetQuery(t *testing.T) {
 			},
 		},
 	}
-	data, _ := json.Marshal(q)
-	t.Log(string(data))
-	t.Log(BuildQuery(q))
+	t.Log("\n", BuildQuery(q))
 }
 
 var Get = struct {
