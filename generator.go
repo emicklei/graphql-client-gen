@@ -105,8 +105,15 @@ func formatComment(comment string) string {
 	if len(lines) <= 1 {
 		return comment
 	}
+	emptyseen := false
 	b := new(bytes.Buffer)
 	for _, each := range lines {
+		if len(each) == 0 {
+			if emptyseen {
+				continue
+			}
+			emptyseen = true
+		}
 		fmt.Fprintf(b, "\n// %s", each)
 	}
 	return b.String()
