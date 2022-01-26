@@ -1,4 +1,4 @@
-module github.com/emicklei/gcg
+module github.com/emicklei/graphql-client-gen
 
 go 1.17
 

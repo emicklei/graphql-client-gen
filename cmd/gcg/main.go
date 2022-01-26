@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/emicklei/gcg"
+	gcg "github.com/emicklei/graphql-client-gen"
 )
 
 var oSchema = flag.String("schema", "", "SDL file")
