@@ -6,7 +6,7 @@ gen:
 	rm -f queries.go
 	rm -f build.go
 	rm -f unions.go
-	go run ../../cmd/gcg/*.go -schema tweet.graphqls -pkg tweet
+	go run ../../cmd/gcg/*.go
 	gofmt -w enums.go
 	gofmt -w mutations.go
 	gofmt -w types.go

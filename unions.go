@@ -41,7 +41,7 @@ func (g *Generator) handleUnions(doc *ast.SchemaDocument, all []*ast.Definition)
 			typeDef := doc.Definitions.ForName(other)
 			// assume never nil
 			for _, his := range typeDef.Fields {
-				fd := buildFieldData(his)
+				fd := g.buildFieldData(his)
 				td.Fields = append(td.Fields, fd)
 			}
 		}
