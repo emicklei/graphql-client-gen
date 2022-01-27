@@ -54,6 +54,15 @@ func (g *Generator) Generate() error {
 			}
 		}
 	}
+	unions := []*ast.Definition{}
+	for _, each := range doc.Definitions {
+		if each.Kind == ast.Union {
+			unions = append(unions, each)
+		}
+	}
+	if err := g.handleUnions(doc, unions); err != nil {
+		return err
+	}
 	if err := g.handleScalars(scalars); err != nil {
 		return err
 	}

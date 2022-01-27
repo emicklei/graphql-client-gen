@@ -10,6 +10,7 @@ type FileData struct {
 	Operations []OperationData
 	Scalars    []ScalarData
 	Functions  []FunctionData
+	Unions     []interface{}
 	Build      BuildData
 }
 
