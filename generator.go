@@ -71,6 +71,15 @@ func (g *Generator) Generate() error {
 			}
 		}
 	}
+	unions := []*ast.Definition{}
+	for _, each := range doc.Definitions {
+		if each.Kind == ast.Union {
+			unions = append(unions, each)
+		}
+	}
+	if err := g.handleUnions(doc, unions); err != nil {
+		return err
+	}
 	if err := g.handleScalars(scalarDefs); err != nil {
 		return err
 	}
@@ -128,15 +137,8 @@ func formatComment(comment string) string {
 	if len(lines) <= 1 {
 		return comment
 	}
-	emptyseen := false
 	b := new(bytes.Buffer)
 	for _, each := range lines {
-		if len(each) == 0 {
-			if emptyseen {
-				continue
-			}
-			emptyseen = true
-		}
 		fmt.Fprintf(b, "\n// %s", each)
 	}
 	return b.String()

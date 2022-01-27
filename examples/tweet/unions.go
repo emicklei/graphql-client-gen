@@ -10,3 +10,10 @@ import (
 var (
 	_ = time.Now
 )
+
+// FilterValue is a UNION.
+type FilterValue struct {
+	ValueFilter
+	ValuesFilter
+	RangeFilter
+}

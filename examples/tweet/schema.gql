@@ -72,6 +72,7 @@ type Query {
     User(id: ID!): User
     Notifications(limit: Int): [Notification]
     NotificationsMeta: Meta
+    CurrentFilter: FilterValue!
 }
 
 type Mutation {
@@ -80,4 +81,27 @@ type Mutation {
     ): Tweet
     deleteTweet(id: ID!): Tweet
     markTweetRead(id: ID!): Boolean
+}
+
+union FilterValue = ValueFilter | ValuesFilter | RangeFilter
+
+type ValueFilter {
+    value: String!
+}
+
+type ValuesFilter {
+    values: [String!]!
+}
+
+type RangeFilter {
+    """
+    Filter the values from and including this value.
+    If this field is not set then the filter is applied without a minimum value.
+    """
+    from: Float
+    """
+    Filter the values up to and including this value.
+    If this field is not set then the filter is applied without a maximum value.
+    """
+    to: Float
 }

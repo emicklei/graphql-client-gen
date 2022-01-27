@@ -10,6 +10,7 @@ type FileData struct {
 	Operations []OperationData
 	Scalars    []ScalarData
 	Functions  []FunctionData
+	Unions     []UnionData
 	Build      BuildData
 }
 
@@ -67,4 +68,10 @@ type FunctionData struct {
 
 type BuildData struct {
 	QueryTag, OperationNameTag, VariablesTag string
+}
+
+type UnionData struct {
+	Comment string
+	Name    string
+	Types   []string
 }
