@@ -1,8 +1,6 @@
 package gcg
 
 import (
-	"bytes"
-	"fmt"
 	"os"
 	"text/template"
 	"time"
@@ -26,35 +24,17 @@ func (g *Generator) handleUnions(doc *ast.SchemaDocument, all []*ast.Definition)
 		Package: g.packageName,
 		Created: time.Now(),
 	}
-	tmpl, err := template.New("tt").Parse(typeTemplateSrc)
+	tmpl, err := template.New("tt").Parse(unionTemplateSrc)
 	if err != nil {
 		return err
 	}
 	for _, each := range all {
-		td := TypeData{
+		ud := UnionData{
 			Comment: formatComment(each.Description),
-			Kind:    string(each.Kind),
-			Name:    unionTypeName(each),
+			Name:    each.Name,
+			Types:   each.Types,
 		}
-		//fields := []*ast.FieldDefinition{}
-		for _, other := range each.Types {
-			typeDef := doc.Definitions.ForName(other)
-			// assume never nil
-			for _, his := range typeDef.Fields {
-				fd := g.buildFieldData(his)
-				td.Fields = append(td.Fields, fd)
-			}
-		}
-		fd.Types = append(fd.Types, td)
+		fd.Unions = append(fd.Unions, ud)
 	}
 	return tmpl.Execute(out, fd)
-}
-
-func unionTypeName(union *ast.Definition) string {
-	b := new(bytes.Buffer)
-	for _, each := range union.Types {
-		fmt.Fprint(b, each)
-	}
-	fmt.Fprint(b, "Union")
-	return b.String()
 }
