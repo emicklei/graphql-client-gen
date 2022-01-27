@@ -10,17 +10,33 @@ import (
 	"github.com/vektah/gqlparser/parser"
 )
 
+type ScalarBinding struct {
+	GraphQLScalar string
+	GoTypeName    string
+}
+
 type Generator struct {
-	schemaSource string
-	packageName  string
-	functions    []Function
+	schemaSource   string
+	packageName    string
+	functions      []Function
+	scalarBindings []ScalarBinding
 }
 
 func NewGenerator(schemaSource string, options ...Option) *Generator {
 	g := &Generator{schemaSource: schemaSource, packageName: "generated"}
+
 	for _, each := range options {
 		each(g)
 	}
+
+	// add default scalar mappings
+	// https://github.com/shurcooL/graphql/blob/master/scalar.go
+	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"Boolean", "bool"})
+	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"Float", "float64"})
+	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"ID", "interface{}"})
+	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"Int", "int32"})
+	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"String", "string"})
+
 	return g
 }
 
@@ -45,12 +61,13 @@ func (g *Generator) Generate() error {
 			enums = append(enums, each)
 		}
 	}
-	scalars := []*ast.Definition{}
+	// Find scalars that need code generation
+	scalarDefs := []*ast.Definition{}
 	for _, each := range doc.Definitions {
 		if each.Kind == ast.Scalar {
 			// filter standards
-			if mapScalar(each.Name) == each.Name {
-				scalars = append(scalars, each)
+			if g.scalarMustBeGenerated(each.Name) {
+				scalarDefs = append(scalarDefs, each)
 			}
 		}
 	}
@@ -63,7 +80,7 @@ func (g *Generator) Generate() error {
 	if err := g.handleUnions(doc, unions); err != nil {
 		return err
 	}
-	if err := g.handleScalars(scalars); err != nil {
+	if err := g.handleScalars(scalarDefs); err != nil {
 		return err
 	}
 	if err := g.handleEnums(enums); err != nil {
@@ -81,6 +98,29 @@ func (g *Generator) Generate() error {
 	return nil
 }
 
+func (g *Generator) scalarMustBeGenerated(name string) bool {
+	return !g.isScalarTypeProvided(name)
+}
+
+func (g *Generator) isScalarTypeProvided(name string) bool {
+	for _, each := range g.scalarBindings {
+		if each.GraphQLScalar == name {
+			return true
+		}
+	}
+	return false
+}
+
+func (g *Generator) mapScalar(name string) string {
+	for _, each := range g.scalarBindings {
+		if each.GraphQLScalar == name {
+			return each.GoTypeName
+		}
+	}
+
+	return name
+}
+
 func fieldName(s string) string {
 	if s == "id" {
 		return "ID"
@@ -90,23 +130,6 @@ func fieldName(s string) string {
 
 func isArray(t *ast.Type) bool {
 	return t.NamedType == ""
-}
-
-// https://github.com/shurcooL/graphql/blob/master/scalar.go
-func mapScalar(name string) string {
-	switch name {
-	case "Boolean":
-		return "bool"
-	case "Float":
-		return "float64"
-	case "ID":
-		return "interface{}"
-	case "Int":
-		return "int32"
-	case "String":
-		return "string"
-	}
-	return name
 }
 
 func formatComment(comment string) string {

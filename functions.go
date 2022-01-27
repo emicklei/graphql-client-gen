@@ -45,7 +45,7 @@ func (g *Generator) handleFunctions() error {
 				Comment:  formatComment(other.Description),
 				Optional: !other.Type.NonNull,
 				Name:     fieldName(other.Name),
-				Type:     mapScalar(other.Type.Name()),
+				Type:     g.mapScalar(other.Type.Name()),
 				IsArray:  isArray(other.Type),
 				Tag:      fmt.Sprintf("`graphql-function-arg:\"%s\"`", other.Name),
 			})

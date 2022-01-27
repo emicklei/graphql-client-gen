@@ -47,7 +47,7 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 						Type:       functionType,
 						Arguments:  other.Arguments,
 						IsArray:    isArray(other.Type),
-						ReturnType: mapScalar(other.Type.Name()),
+						ReturnType: g.mapScalar(other.Type.Name()),
 					}
 					g.functions = append(g.functions, fnc)
 					td.Fields = append(td.Fields, FieldData{
@@ -57,7 +57,7 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 						Tag:     fmt.Sprintf("`graphql:\"%s\" json:\"%s,omitempty\"`", other.Name, other.Name),
 					})
 				} else {
-					td.Fields = append(td.Fields, buildFieldData(other))
+					td.Fields = append(td.Fields, g.buildFieldData(other))
 				}
 			}
 			fd.Types = append(fd.Types, td)
@@ -66,12 +66,12 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 	return tmpl.Execute(out, fd)
 }
 
-func buildFieldData(other *ast.FieldDefinition) FieldData {
+func (g *Generator) buildFieldData(other *ast.FieldDefinition) FieldData {
 	return FieldData{
 		Comment:  formatComment(other.Description),
 		Optional: !other.Type.NonNull,
 		Name:     fieldName(other.Name),
-		Type:     mapScalar(other.Type.Name()),
+		Type:     g.mapScalar(other.Type.Name()),
 		IsArray:  isArray(other.Type),
 		Tag:      fmt.Sprintf("`graphql:\"%s\" json:\"%s,omitempty\"`", other.Name, other.Name),
 	}
