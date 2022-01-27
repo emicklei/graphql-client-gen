@@ -1,3 +1,7 @@
+"""
+This is a 
+multine comment
+"""
 type Tweet {
     id: ID!
     # The tweet text. No more than 140 characters!
@@ -9,6 +13,7 @@ type Tweet {
     # Views, retweets, likes, etc
     Stats: Stat
     # First responders
+    # multiline
     Responders(limit:Int!):[User!]
 }
 
@@ -30,21 +35,39 @@ type Stat {
 }
 
 type Notification {
+    """ comment 1 """
     id: ID
+    """
+    comment 2
+    """
     date: Date
+    # private comment
     type: String
 }
 
 type Meta {
+    """
+    This is a
+    multine comment
+    """
     count: Int
 }
 
+"""
+This is a 
+multine comment
+"""
 scalar Url
 scalar Date
 
 type Query {
     Tweet(id: ID!): Tweet
+    """
+    This is a 
+    multine comment
+    """
     Tweets(limit: Int, skip: Int, sort_field: String, sort_order: String): [Tweet]
+    # other comment
     TweetsMeta: Meta
     User(id: ID!): User
     Notifications(limit: Int): [Notification]

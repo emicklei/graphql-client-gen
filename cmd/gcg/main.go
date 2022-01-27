@@ -9,7 +9,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/emicklei/gcg"
+	gcg "github.com/emicklei/graphql-client-gen"
 )
 
 const DEFAULT_CONFIG_FILE = "schema-generate.yaml"

@@ -1,6 +1,10 @@
 package gcg
 
 import (
+	"bytes"
+	"fmt"
+	"strings"
+
 	"github.com/iancoleman/strcase"
 	"github.com/vektah/gqlparser/ast"
 	"github.com/vektah/gqlparser/parser"
@@ -25,7 +29,8 @@ func NewGenerator(schemaSource string, options ...Option) *Generator {
 		each(g)
 	}
 
-	// add default scalar mapping
+	// add default scalar mappings
+	// https://github.com/shurcooL/graphql/blob/master/scalar.go
 	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"Boolean", "bool"})
 	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"Float", "float64"})
 	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"ID", "interface{}"})
@@ -116,4 +121,23 @@ func fieldName(s string) string {
 
 func isArray(t *ast.Type) bool {
 	return t.NamedType == ""
+}
+
+func formatComment(comment string) string {
+	lines := strings.Split(comment, "\n")
+	if len(lines) <= 1 {
+		return comment
+	}
+	emptyseen := false
+	b := new(bytes.Buffer)
+	for _, each := range lines {
+		if len(each) == 0 {
+			if emptyseen {
+				continue
+			}
+			emptyseen = true
+		}
+		fmt.Fprintf(b, "\n// %s", each)
+	}
+	return b.String()
 }

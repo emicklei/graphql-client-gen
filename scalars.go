@@ -24,7 +24,7 @@ func (g *Generator) handleScalars(all []*ast.Definition) error {
 	}
 	for _, each := range all {
 		sd := ScalarData{
-			Comment: each.Description,
+			Comment: formatComment(each.Description),
 			Name:    each.Name,
 		}
 		fd.Scalars = append(fd.Scalars, sd)

@@ -34,7 +34,7 @@ func (g *Generator) handleFunctions() error {
 	}
 	for _, each := range g.functions {
 		fnd := FunctionData{
-			Comment:    each.Description,
+			Comment:    formatComment(each.Description),
 			Name:       each.Type,
 			IsArray:    each.IsArray,
 			ReturnType: each.ReturnType,
@@ -42,6 +42,7 @@ func (g *Generator) handleFunctions() error {
 		for _, other := range each.Arguments {
 			// todo refactor this, is now copy of types.go occurrence
 			fnd.Fields = append(fnd.Fields, FieldData{
+				Comment:  formatComment(other.Description),
 				Optional: !other.Type.NonNull,
 				Name:     fieldName(other.Name),
 				Type:     g.mapScalar(other.Type.Name()),

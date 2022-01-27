@@ -16,6 +16,8 @@ var (
 // {{.Name}} is a {{.Kind}}. {{.Comment}}
 type {{.Name}} struct {
 	{{- range .Fields}}
+	{{- if gt (len .Comment) 0}}
+	// {{.Comment}}{{- end}}
 	{{.Name}} {{if .Optional}} *{{else}} {{end}}{{if .IsArray}}[]{{end}}{{.Type}} {{.Tag}}
 	{{- end}}
 }

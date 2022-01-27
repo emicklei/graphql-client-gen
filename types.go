@@ -35,7 +35,7 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 		}
 		if each.Kind == ast.Object || each.Kind == ast.InputObject || each.Kind == ast.Interface {
 			td := TypeData{
-				Comment: each.Description,
+				Comment: formatComment(each.Description),
 				Kind:    string(each.Kind),
 				Name:    each.Name,
 			}
@@ -51,14 +51,14 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 					}
 					g.functions = append(g.functions, fnc)
 					td.Fields = append(td.Fields, FieldData{
-						Comment: other.Description,
+						Comment: formatComment(other.Description),
 						Name:    fieldName(other.Name),
 						Type:    "*" + functionType, // result is optional so use pointer
 						Tag:     fmt.Sprintf("`graphql:\"%s\" json:\"%s,omitempty\"`", other.Name, other.Name),
 					})
 				} else {
 					td.Fields = append(td.Fields, FieldData{
-						Comment:  other.Description,
+						Comment:  formatComment(other.Description),
 						Optional: !other.Type.NonNull,
 						Name:     fieldName(other.Name),
 						Type:     g.mapScalar(other.Type.Name()),

@@ -28,7 +28,7 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 	for _, other := range each.Fields {
 		rt := g.mapScalar(other.Type.Name())
 		od := OperationData{
-			Comment:        other.Description,
+			Comment:        formatComment(other.Description),
 			Name:           other.Name,
 			FunctionName:   strcase.ToCamel(other.Name),
 			IsArray:        isArray(other.Type),
