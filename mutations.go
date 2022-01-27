@@ -26,7 +26,7 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 		return err
 	}
 	for _, other := range each.Fields {
-		rt := mapScalar(other.Type.Name())
+		rt := g.mapScalar(other.Type.Name())
 		od := OperationData{
 			Comment:        formatComment(other.Description),
 			Name:           other.Name,
@@ -46,7 +46,7 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 			}
 			fmt.Fprintf(tag, "%s: $%s", arg.Name, arg.Name)
 			od.Arguments = append(od.Arguments, Argument{
-				Name: arg.Name, Type: mapScalar(arg.Type.Name()), IsArray: isArray(arg.Type)})
+				Name: arg.Name, Type: g.mapScalar(arg.Type.Name()), IsArray: isArray(arg.Type)})
 		}
 		fmt.Fprintf(tag, ")\" json:\"%s\"`", other.Name)
 		od.ReturnFieldTag = tag.String()
