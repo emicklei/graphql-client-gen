@@ -8,4 +8,7 @@ require (
 	github.com/vektah/gqlparser v1.3.1
 )
 
-require golang.org/x/net v0.0.0-20220121175114-2ed6ce1e1725 // indirect
+require (
+	golang.org/x/net v0.0.0-20220121175114-2ed6ce1e1725 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
+)
