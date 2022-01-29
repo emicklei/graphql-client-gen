@@ -42,3 +42,11 @@ func TestTweetQueryGen(t *testing.T) {
 	s := q.Build("test", 101)
 	t.Log("\n", s)
 }
+
+func TestTweetQuery2Gen(t *testing.T) {
+	q := TweetQuery2{}
+	q.Data.Tweet.Author = &User{Name: &Get.String}
+	q.Data.Stats = &Stat{Likes: &Get.Int32}
+	s := q.Build("test", 101)
+	t.Log("\n", s)
+}
