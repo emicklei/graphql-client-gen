@@ -25,42 +25,49 @@ func (g *Generator) handleQueries(def *ast.Definition) error {
 		return err
 	}
 	for _, each := range def.Fields {
-		break // TODO
 		op := OperationData{
 			Comment:      formatComment(each.Description),
 			FunctionName: strcase.ToCamel(each.Name),
-			ReturnType:   each.Type.Name(),
-			IsArray:      isArray(each.Type),
+			ReturnType:   g.mapScalar(each.Type.Name()),
+			IsArray:      isArray(each.Type), // refers to the Data field
 			ErrorsTag:    "`json:\"errors\"`",
 		}
 		// build return field tag
 		// `graphql:"Tweet(id: $id)" json:"Tweet"`
 		tag := new(bytes.Buffer)
-		fmt.Fprintf(tag, "`graphql:\"%s(", each.Type.Name())
-		for i, arg := range each.Arguments {
-			if i > 0 {
-				fmt.Fprintf(tag, ",")
+		fmt.Fprintf(tag, "`graphql:\"%s", each.Name)
+		if len(each.Arguments) > 0 {
+			fmt.Fprint(tag, "(")
+			for i, arg := range each.Arguments {
+				if i > 0 {
+					fmt.Fprintf(tag, ",")
+				}
+				fmt.Fprintf(tag, "%s: $%s", arg.Name, arg.Name)
+				op.Arguments = append(op.Arguments, Argument{
+					Name:     goArgName(arg.Name),
+					JSONName: arg.Name,
+					Type:     g.mapScalar(arg.Type.Name()),
+					IsArray:  isArray(arg.Type)})
 			}
-			fmt.Fprintf(tag, "%s: $%s", arg.Name, arg.Name)
-			op.Arguments = append(op.Arguments, Argument{
-				Name:     goArgName(arg.Name),
-				JSONName: arg.Name,
-				Type:     g.mapScalar(arg.Type.Name()),
-				IsArray:  isArray(arg.Type)})
+			fmt.Fprintf(tag, ")")
 		}
-		fmt.Fprintf(tag, ")\" json:\"%s\"`", each.Type.Name())
+		fmt.Fprintf(tag, "\" json:\"%s\"`", each.Name)
 		op.ReturnFieldTag = tag.String()
 		// build data field tag
 		// `graphql:"query OperationName($id: ID!)"`
 		tag = new(bytes.Buffer)
-		fmt.Fprintf(tag, "`graphql:\"query OperationName(")
-		for i, arg := range each.Arguments {
-			if i > 0 {
-				fmt.Fprintf(tag, ",")
+		fmt.Fprintf(tag, "`graphql:\"query OperationName")
+		if len(each.Arguments) > 0 {
+			fmt.Fprint(tag, "(")
+			for i, arg := range each.Arguments {
+				if i > 0 {
+					fmt.Fprintf(tag, ",")
+				}
+				fmt.Fprintf(tag, "$%s: %s", arg.Name, arg.Type.String())
 			}
-			fmt.Fprintf(tag, "$%s: %s", arg.Name, arg.Type.String())
+			fmt.Fprintf(tag, ")")
 		}
-		fmt.Fprintf(tag, ")\"`")
+		fmt.Fprint(tag, "\"`")
 		op.DataTag = tag.String()
 		fd.Queries = append(fd.Queries, op)
 	}

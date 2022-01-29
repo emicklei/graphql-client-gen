@@ -52,7 +52,7 @@ type TweetsQuery struct {
 }
 
 type TweetsQueryData struct {
-	Tweet `graphql:"Tweet(limit: $limit,skip: $skip,sort_field: $sort_field,sort_order: $sort_order)" json:"Tweet"`
+	Tweet `graphql:"Tweets(limit: $limit,skip: $skip,sort_field: $sort_field,sort_order: $sort_order)" json:"Tweets"`
 }
 
 // OperationName returns the actual query operation name that is used to replace "OperationName"
@@ -85,11 +85,11 @@ func (_q TweetsQuery) Build(
 type TweetsMetaQuery struct {
 	Operation string
 	Errors    Errors              `json:"errors"`
-	Data      TweetsMetaQueryData `graphql:"query OperationName()"`
+	Data      TweetsMetaQueryData `graphql:"query OperationName"`
 }
 
 type TweetsMetaQueryData struct {
-	Meta `graphql:"Meta()" json:"Meta"`
+	Meta `graphql:"TweetsMeta" json:"TweetsMeta"`
 }
 
 // OperationName returns the actual query operation name that is used to replace "OperationName"
@@ -148,7 +148,7 @@ type NotificationsQuery struct {
 }
 
 type NotificationsQueryData struct {
-	Notification `graphql:"Notification(limit: $limit)" json:"Notification"`
+	Notification `graphql:"Notifications(limit: $limit)" json:"Notifications"`
 }
 
 // OperationName returns the actual query operation name that is used to replace "OperationName"
@@ -175,11 +175,11 @@ func (_q NotificationsQuery) Build(
 type NotificationsMetaQuery struct {
 	Operation string
 	Errors    Errors                     `json:"errors"`
-	Data      NotificationsMetaQueryData `graphql:"query OperationName()"`
+	Data      NotificationsMetaQueryData `graphql:"query OperationName"`
 }
 
 type NotificationsMetaQueryData struct {
-	Meta `graphql:"Meta()" json:"Meta"`
+	Meta `graphql:"NotificationsMeta" json:"NotificationsMeta"`
 }
 
 // OperationName returns the actual query operation name that is used to replace "OperationName"
@@ -203,11 +203,11 @@ func (_q NotificationsMetaQuery) Build(
 type CurrentFilterQuery struct {
 	Operation string
 	Errors    Errors                 `json:"errors"`
-	Data      CurrentFilterQueryData `graphql:"query OperationName()"`
+	Data      CurrentFilterQueryData `graphql:"query OperationName"`
 }
 
 type CurrentFilterQueryData struct {
-	FilterValue `graphql:"FilterValue()" json:"FilterValue"`
+	FilterValue `graphql:"CurrentFilter" json:"CurrentFilter"`
 }
 
 // OperationName returns the actual query operation name that is used to replace "OperationName"
