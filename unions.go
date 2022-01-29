@@ -3,7 +3,6 @@ package gcg
 import (
 	"os"
 	"text/template"
-	"time"
 
 	"github.com/vektah/gqlparser/ast"
 )
@@ -21,8 +20,8 @@ func (g *Generator) handleUnions(doc *ast.SchemaDocument, all []*ast.Definition)
 	}
 	defer out.Close()
 	fd := FileData{
-		Package: g.packageName,
-		Created: time.Now(),
+		Package:      g.packageName,
+		BuildVersion: g.mainVersion,
 	}
 	tmpl, err := template.New("tt").Parse(unionTemplateSrc)
 	if err != nil {

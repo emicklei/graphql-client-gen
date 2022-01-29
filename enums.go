@@ -3,7 +3,6 @@ package gcg
 import (
 	"os"
 	"text/template"
-	"time"
 
 	"github.com/vektah/gqlparser/ast"
 )
@@ -15,8 +14,8 @@ func (g *Generator) handleEnums(all []*ast.Definition) error {
 	}
 	defer out.Close()
 	fd := FileData{
-		Package: g.packageName,
-		Created: time.Now(),
+		Package:      g.packageName,
+		BuildVersion: g.mainVersion,
 	}
 	tmpl, err := template.New("tt").Parse(enumsTemplateSrc)
 	if err != nil {

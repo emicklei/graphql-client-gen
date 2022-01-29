@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"text/template"
-	"time"
 
 	"github.com/iancoleman/strcase"
 	"github.com/vektah/gqlparser/ast"
@@ -18,8 +17,8 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 	}
 	defer out.Close()
 	fd := FileData{
-		Package: g.packageName,
-		Created: time.Now(),
+		Package:      g.packageName,
+		BuildVersion: g.mainVersion,
 	}
 	tmpl, err := template.New("tt").Parse(operationsTemplateSrc)
 	if err != nil {
@@ -62,7 +61,7 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 		}
 		fmt.Fprintf(tag, ")\"`")
 		od.DataTag = tag.String()
-		fd.Operations = append(fd.Operations, od)
+		fd.Mutations = append(fd.Mutations, od)
 	}
 	return tmpl.Execute(out, fd)
 }

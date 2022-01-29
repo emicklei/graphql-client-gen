@@ -1,17 +1,16 @@
 package gcg
 
-import "time"
-
 type FileData struct {
-	Package    string
-	Created    time.Time
-	Types      []TypeData
-	Enums      []EnumData
-	Operations []OperationData
-	Scalars    []ScalarData
-	Functions  []FunctionData
-	Unions     []UnionData
-	Build      BuildData
+	Package      string
+	BuildVersion string
+	Types        []TypeData
+	Enums        []EnumData
+	Mutations    []OperationData
+	Queries      []OperationData
+	Scalars      []ScalarData
+	Functions    []FunctionData
+	Unions       []UnionData
+	Build        BuildData
 }
 
 type Argument struct {

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"text/template"
-	"time"
 
 	"github.com/vektah/gqlparser/ast"
 )
@@ -20,8 +19,8 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 		return err
 	}
 	fd := FileData{
-		Package: g.packageName,
-		Created: time.Now(),
+		Package:      g.packageName,
+		BuildVersion: g.mainVersion,
 	}
 	for _, each := range doc.Definitions {
 		if each.Name == "Mutation" {

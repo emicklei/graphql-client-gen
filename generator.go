@@ -3,6 +3,7 @@ package gcg
 import (
 	"bytes"
 	"fmt"
+	"runtime/debug"
 	"strings"
 
 	"github.com/iancoleman/strcase"
@@ -20,11 +21,18 @@ type Generator struct {
 	packageName    string
 	functions      []Function
 	scalarBindings []ScalarBinding
+	mainVersion    string
 }
 
 func NewGenerator(schemaSource string, options ...Option) *Generator {
 	g := &Generator{schemaSource: schemaSource, packageName: "generated"}
-
+	// need version to put in generated files
+	bi, ok := debug.ReadBuildInfo()
+	if ok && len(bi.Main.Version) > 0 {
+		g.mainVersion = bi.Main.Version
+	} else {
+		g.mainVersion = "(dev)"
+	}
 	for _, each := range options {
 		each(g)
 	}

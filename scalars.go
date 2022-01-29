@@ -3,7 +3,6 @@ package gcg
 import (
 	"os"
 	"text/template"
-	"time"
 
 	"github.com/vektah/gqlparser/ast"
 )
@@ -15,8 +14,8 @@ func (g *Generator) handleScalars(all []*ast.Definition) error {
 	}
 	defer out.Close()
 	fd := FileData{
-		Package: g.packageName,
-		Created: time.Now(),
+		Package:      g.packageName,
+		BuildVersion: g.mainVersion,
 	}
 	tmpl, err := template.New("tt").Parse(scalarsTemplateSrc)
 	if err != nil {

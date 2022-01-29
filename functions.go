@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"text/template"
-	"time"
 
 	"github.com/vektah/gqlparser/ast"
 )
@@ -25,8 +24,8 @@ func (g *Generator) handleFunctions() error {
 	}
 	defer out.Close()
 	fd := FileData{
-		Package: g.packageName,
-		Created: time.Now(),
+		Package:      g.packageName,
+		BuildVersion: g.mainVersion,
 	}
 	tmpl, err := template.New("tt").Parse(functionsTemplateSrc)
 	if err != nil {

@@ -3,7 +3,6 @@ package gcg
 import (
 	"os"
 	"text/template"
-	"time"
 )
 
 func (g *Generator) handleBuildTools() error {
@@ -13,8 +12,8 @@ func (g *Generator) handleBuildTools() error {
 	}
 	defer out.Close()
 	fd := FileData{
-		Package: g.packageName,
-		Created: time.Now(),
+		Package:      g.packageName,
+		BuildVersion: g.mainVersion,
 	}
 	tmpl, err := template.New("tt").Parse(buildSrcTemplate)
 	if err != nil {
