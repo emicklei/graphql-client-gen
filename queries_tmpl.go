@@ -17,6 +17,7 @@ var (
 // {{.FunctionName}}Query is used for both specifying the query and capturing the response. {{.Comment}}
 type {{.FunctionName}}Query struct {
 	Operation string
+	Errors Errors {{.ErrorsTag}}
 	Data      {{if .IsArray}}[]{{end}}{{.FunctionName}}QueryData {{.DataTag}}
 }
 
@@ -42,7 +43,7 @@ func (_q {{.FunctionName}}Query) Build(
 		OperationName: operationName,
 		Variables: map[string]interface{}{
 			{{- range .Arguments}}
-			"{{.Name}}": {{.Name}},
+			"{{.JSONName}}": {{.Name}},
 			{{- end }}
 		},
 	}

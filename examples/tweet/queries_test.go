@@ -9,6 +9,7 @@ import (
 type TweetQuery2 struct {
 	// Operation is the operationName and cannot be empty
 	Operation string
+	Errors2   `json:"errors,omitempty"`
 	Data      TweetQuery2Data `graphql:"query OperationName($id: ID!)"`
 }
 
@@ -23,16 +24,20 @@ func (q TweetQuery2) OperationName() string {
 
 func (_q TweetQuery2) Build(
 	operationName string,
-	id interface{},
+	args TweetQuery2Args,
 ) GraphQLRequest {
 	_q.Operation = operationName
 	return GraphQLRequest{
 		Query:         BuildQuery(_q),
 		OperationName: operationName,
 		Variables: map[string]interface{}{
-			"id": id,
+			"id": args.id,
 		},
 	}
+}
+
+type TweetQuery2Args struct {
+	id interface{}
 }
 
 func TestTweetQueryGen(t *testing.T) {
@@ -47,6 +52,15 @@ func TestTweetQuery2Gen(t *testing.T) {
 	q := TweetQuery2{}
 	q.Data.Tweet.Author = &User{Name: &Get.String}
 	q.Data.Stats = &Stat{Likes: &Get.Int32}
-	s := q.Build("test", 101)
+	s := q.Build("test", TweetQuery2Args{id: 1})
 	t.Log("\n", s)
+}
+
+type Errors2 struct {
+	Message   string `json:"message,omitempty"`
+	Locations []struct {
+		Line   int `json:"line"`
+		Column int `json:"column"`
+	} `json:"locations,omitempty"`
+	Extensions map[string]interface{} `json:"extensions,omitempty"`
 }

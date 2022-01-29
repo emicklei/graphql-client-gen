@@ -125,3 +125,12 @@ type GraphQLRequest struct {
 type OverridesOperationName interface {
 	OperationName() string
 }
+
+type Errors struct {
+	Message   string `json:"message,omitempty"`
+	Locations []struct {
+		Line   int `json:"line"`
+		Column int `json:"column"`
+	} `json:"locations,omitempty"`
+	Extensions map[string]interface{} `json:"extensions,omitempty"`
+}

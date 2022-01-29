@@ -13,8 +13,8 @@ var (
 
 // TweetQuery is used for both specifying the query and capturing the response.
 type TweetQuery struct {
-	// Operation is the operationName and cannot be empty
 	Operation string
+	Errors    Errors         `json:"errors"`
 	Data      TweetQueryData `graphql:"query OperationName($id: ID!)"`
 }
 
@@ -29,23 +29,25 @@ func (q TweetQuery) OperationName() string {
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_q TweetQuery) Build(
-	operationName string,
-	id interface{},
+	operationName string, // cannot be emtpy
+	_id interface{},
 ) GraphQLRequest {
 	_q.Operation = operationName
 	return GraphQLRequest{
 		Query:         BuildQuery(_q),
 		OperationName: operationName,
 		Variables: map[string]interface{}{
-			"id": id,
+			"id": _id,
 		},
 	}
 }
 
 // TweetsQuery is used for both specifying the query and capturing the response.
+// This is a
+// multine comment
 type TweetsQuery struct {
-	// Operation is the operationName and cannot be empty
 	Operation string
+	Errors    Errors            `json:"errors"`
 	Data      []TweetsQueryData `graphql:"query OperationName($limit: Int,$skip: Int,$sort_field: String,$sort_order: String)"`
 }
 
@@ -60,29 +62,29 @@ func (q TweetsQuery) OperationName() string {
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_q TweetsQuery) Build(
-	operationName string,
-	limit int32,
-	skip int32,
-	sort_field string,
-	sort_order string,
+	operationName string, // cannot be emtpy
+	_limit int32,
+	_skip int32,
+	_sort_field string,
+	_sort_order string,
 ) GraphQLRequest {
 	_q.Operation = operationName
 	return GraphQLRequest{
 		Query:         BuildQuery(_q),
 		OperationName: operationName,
 		Variables: map[string]interface{}{
-			"limit":      limit,
-			"skip":       skip,
-			"sort_field": sort_field,
-			"sort_order": sort_order,
+			"limit":      _limit,
+			"skip":       _skip,
+			"sort_field": _sort_field,
+			"sort_order": _sort_order,
 		},
 	}
 }
 
 // TweetsMetaQuery is used for both specifying the query and capturing the response.
 type TweetsMetaQuery struct {
-	// Operation is the operationName and cannot be empty
 	Operation string
+	Errors    Errors              `json:"errors"`
 	Data      TweetsMetaQueryData `graphql:"query OperationName()"`
 }
 
@@ -97,7 +99,7 @@ func (q TweetsMetaQuery) OperationName() string {
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_q TweetsMetaQuery) Build(
-	operationName string,
+	operationName string, // cannot be emtpy
 ) GraphQLRequest {
 	_q.Operation = operationName
 	return GraphQLRequest{
@@ -109,8 +111,8 @@ func (_q TweetsMetaQuery) Build(
 
 // UserQuery is used for both specifying the query and capturing the response.
 type UserQuery struct {
-	// Operation is the operationName and cannot be empty
 	Operation string
+	Errors    Errors        `json:"errors"`
 	Data      UserQueryData `graphql:"query OperationName($id: ID!)"`
 }
 
@@ -125,23 +127,23 @@ func (q UserQuery) OperationName() string {
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_q UserQuery) Build(
-	operationName string,
-	id interface{},
+	operationName string, // cannot be emtpy
+	_id interface{},
 ) GraphQLRequest {
 	_q.Operation = operationName
 	return GraphQLRequest{
 		Query:         BuildQuery(_q),
 		OperationName: operationName,
 		Variables: map[string]interface{}{
-			"id": id,
+			"id": _id,
 		},
 	}
 }
 
 // NotificationsQuery is used for both specifying the query and capturing the response.
 type NotificationsQuery struct {
-	// Operation is the operationName and cannot be empty
 	Operation string
+	Errors    Errors                   `json:"errors"`
 	Data      []NotificationsQueryData `graphql:"query OperationName($limit: Int)"`
 }
 
@@ -156,23 +158,23 @@ func (q NotificationsQuery) OperationName() string {
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_q NotificationsQuery) Build(
-	operationName string,
-	limit int32,
+	operationName string, // cannot be emtpy
+	_limit int32,
 ) GraphQLRequest {
 	_q.Operation = operationName
 	return GraphQLRequest{
 		Query:         BuildQuery(_q),
 		OperationName: operationName,
 		Variables: map[string]interface{}{
-			"limit": limit,
+			"limit": _limit,
 		},
 	}
 }
 
 // NotificationsMetaQuery is used for both specifying the query and capturing the response.
 type NotificationsMetaQuery struct {
-	// Operation is the operationName and cannot be empty
 	Operation string
+	Errors    Errors                     `json:"errors"`
 	Data      NotificationsMetaQueryData `graphql:"query OperationName()"`
 }
 
@@ -187,7 +189,7 @@ func (q NotificationsMetaQuery) OperationName() string {
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_q NotificationsMetaQuery) Build(
-	operationName string,
+	operationName string, // cannot be emtpy
 ) GraphQLRequest {
 	_q.Operation = operationName
 	return GraphQLRequest{
@@ -199,8 +201,8 @@ func (_q NotificationsMetaQuery) Build(
 
 // CurrentFilterQuery is used for both specifying the query and capturing the response.
 type CurrentFilterQuery struct {
-	// Operation is the operationName and cannot be empty
 	Operation string
+	Errors    Errors                 `json:"errors"`
 	Data      CurrentFilterQueryData `graphql:"query OperationName()"`
 }
 
@@ -215,7 +217,7 @@ func (q CurrentFilterQuery) OperationName() string {
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_q CurrentFilterQuery) Build(
-	operationName string,
+	operationName string, // cannot be emtpy
 ) GraphQLRequest {
 	_q.Operation = operationName
 	return GraphQLRequest{

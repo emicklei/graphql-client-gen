@@ -151,3 +151,8 @@ func formatComment(comment string) string {
 	}
 	return b.String()
 }
+
+func goArgName(name string) string {
+	// check for reserved Go names to prevent syntax errors
+	return "_" + name
+}

@@ -14,9 +14,10 @@ type FileData struct {
 }
 
 type Argument struct {
-	Name    string
-	Type    string
-	IsArray bool
+	Name     string
+	JSONName string
+	Type     string
+	IsArray  bool
 }
 
 type OperationData struct {
@@ -28,6 +29,7 @@ type OperationData struct {
 	ReturnFieldTag string
 	IsArray        bool
 	DataTag        string
+	ErrorsTag      string
 }
 
 type TypeData struct {

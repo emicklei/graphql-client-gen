@@ -16,6 +16,7 @@ var (
 
 // {{.FunctionName}}Mutation is used for both specifying the query and capturing the response. {{.Comment}}
 type {{.FunctionName}}Mutation struct {
+	Errors Errors {{.ErrorsTag}}
 	Data struct {
 		{{.ReturnType}} {{.ReturnFieldTag}}
 	} {{.DataTag}}
@@ -32,7 +33,7 @@ func (_m {{.FunctionName}}Mutation) Build(
 		OperationName: "{{.Name}}",
 		Variables: map[string]interface{}{
 			{{- range .Arguments}}
-			"{{.Name}}": {{.Name}},
+			"{{.JSONName}}": {{.Name}},
 			{{- end }}
 		},
 	}

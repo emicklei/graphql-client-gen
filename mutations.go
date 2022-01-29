@@ -27,13 +27,12 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 	for _, other := range each.Fields {
 		rt := g.mapScalar(other.Type.Name())
 		od := OperationData{
-			Comment:        formatComment(other.Description),
-			Name:           other.Name,
-			FunctionName:   strcase.ToCamel(other.Name),
-			IsArray:        isArray(other.Type),
-			ReturnType:     rt,
-			DataTag:        "",
-			ReturnFieldTag: "",
+			Comment:      formatComment(other.Description),
+			Name:         other.Name,
+			FunctionName: strcase.ToCamel(other.Name),
+			IsArray:      isArray(other.Type),
+			ReturnType:   rt,
+			ErrorsTag:    "`json:\"errors\"`",
 		}
 		// build return field tag
 		// `graphql:"createGrouping(input:$input,pritSheetID:$pritSheetID,repositoryID:$repositoryID)" json:"createGrouping"`
@@ -45,7 +44,9 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 			}
 			fmt.Fprintf(tag, "%s: $%s", arg.Name, arg.Name)
 			od.Arguments = append(od.Arguments, Argument{
-				Name: arg.Name, Type: g.mapScalar(arg.Type.Name()), IsArray: isArray(arg.Type)})
+				Name:     goArgName(arg.Name),
+				JSONName: arg.Name,
+				Type:     g.mapScalar(arg.Type.Name()), IsArray: isArray(arg.Type)})
 		}
 		fmt.Fprintf(tag, ")\" json:\"%s\"`", other.Name)
 		od.ReturnFieldTag = tag.String()
