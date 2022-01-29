@@ -16,7 +16,6 @@ var (
 
 // {{.FunctionName}}Query is used for both specifying the query and capturing the response. {{.Comment}}
 type {{.FunctionName}}Query struct {
-	// Operation is the operationName and cannot be empty
 	Operation string
 	Data      {{if .IsArray}}[]{{end}}{{.FunctionName}}QueryData {{.DataTag}}
 }
@@ -32,7 +31,7 @@ func (q {{.FunctionName}}Query) OperationName() string {
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_q {{.FunctionName}}Query) Build(
-	operationName string,
+	operationName string, // cannot be emtpy
 	{{- range .Arguments}}
 	{{.Name}} {{.Type}}, 
 	{{- end }}

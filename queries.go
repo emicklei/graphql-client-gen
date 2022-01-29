@@ -6,6 +6,7 @@ import (
 	"os"
 	"text/template"
 
+	"github.com/iancoleman/strcase"
 	"github.com/vektah/gqlparser/ast"
 )
 
@@ -25,7 +26,8 @@ func (g *Generator) handleQueries(def *ast.Definition) error {
 	}
 	for _, each := range def.Fields {
 		op := OperationData{
-			FunctionName: each.Name,
+			Comment:      formatComment(each.Description),
+			FunctionName: strcase.ToCamel(each.Name),
 			ReturnType:   each.Type.Name(),
 			IsArray:      isArray(each.Type),
 		}
