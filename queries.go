@@ -25,6 +25,7 @@ func (g *Generator) handleQueries(def *ast.Definition) error {
 		return err
 	}
 	for _, each := range def.Fields {
+		break // TODO
 		op := OperationData{
 			Comment:      formatComment(each.Description),
 			FunctionName: strcase.ToCamel(each.Name),

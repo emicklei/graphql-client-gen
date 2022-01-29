@@ -10,7 +10,6 @@ type FileData struct {
 	Scalars      []ScalarData
 	Functions    []FunctionData
 	Unions       []UnionData
-	Build        BuildData
 }
 
 type Argument struct {
@@ -65,10 +64,6 @@ type FunctionData struct {
 	Fields     []FieldData
 	IsArray    bool
 	ReturnType string
-}
-
-type BuildData struct {
-	QueryTag, OperationNameTag, VariablesTag string
 }
 
 type UnionData struct {
