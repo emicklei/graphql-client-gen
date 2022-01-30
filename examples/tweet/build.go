@@ -126,6 +126,7 @@ type OverridesOperationName interface {
 	OperationName() string
 }
 
+// Errors is a response field to capture server reported problems
 type Errors struct {
 	Message   string `json:"message,omitempty"`
 	Locations []struct {

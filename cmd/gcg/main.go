@@ -15,8 +15,6 @@ import (
 
 const DEFAULT_CONFIG_FILE = "schema-generate.yaml"
 
-var oSchema = flag.String("schema", "", "GraphQL schema SDL file (default 'schema.gql')")
-var oPackage = flag.String("pkg", "", "package in which types are generated (default 'generated')")
 var oConfig = flag.String("config", "", fmt.Sprintf("a YAML config file containing scalar binding mapping (default %s)", DEFAULT_CONFIG_FILE))
 
 type Config struct {
@@ -55,14 +53,6 @@ func readConfig() *Config {
 		if err != nil {
 			log.Fatalln(err)
 		}
-	}
-
-	if *oSchema != "" {
-		config.SchemaFile = *oSchema
-	}
-
-	if *oPackage != "" {
-		config.PackageName = *oPackage
 	}
 
 	return &config

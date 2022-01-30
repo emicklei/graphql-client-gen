@@ -13,4 +13,5 @@ gen:
 	gofmt -w scalars.go
 	gofmt -w queries.go
 	gofmt -w build.go
+	gofmt -w functions.go
 	gofmt -w unions.go
