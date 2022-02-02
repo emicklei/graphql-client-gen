@@ -13,10 +13,11 @@ type FileData struct {
 }
 
 type Argument struct {
-	Name     string
-	JSONName string
-	Type     string
-	IsArray  bool
+	Name      string
+	JSONName  string
+	Type      string
+	GraphType string
+	IsArray   bool
 }
 
 type OperationData struct {

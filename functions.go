@@ -48,7 +48,7 @@ func (g *Generator) handleFunctions() error {
 				Name:     fieldName(other.Name),
 				Type:     g.mapScalar(other.Type.Name()),
 				IsArray:  isArray(other.Type),
-				Tag:      fmt.Sprintf("`graphql-function-arg:\"%s\"`", other.Name),
+				Tag:      fmt.Sprintf("`graphql-function-arg:\"%s\" graphql-function-type:\"%s\"`", other.Name, other.Type.String()),
 			})
 		}
 		fd.Functions = append(fd.Functions, fnd)

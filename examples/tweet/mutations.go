@@ -23,12 +23,14 @@ type CreateTweetMutation struct {
 func (_m CreateTweetMutation) Build(
 	_body string,
 ) GraphQLRequest {
+	_typedVars := map[string]valueAndType{
+		"body": {value: _body, graphType: "String"},
+	}
+	_query, _vars := buildMutation("createTweet", _m.Data, _typedVars)
 	return GraphQLRequest{
-		Query:         BuildQuery(_m),
+		Query:         _query,
 		OperationName: "createTweet",
-		Variables: map[string]interface{}{
-			"body": _body,
-		},
+		Variables:     _vars,
 	}
 }
 
@@ -44,12 +46,14 @@ type DeleteTweetMutation struct {
 func (_m DeleteTweetMutation) Build(
 	_id interface{},
 ) GraphQLRequest {
+	_typedVars := map[string]valueAndType{
+		"id": {value: _id, graphType: "ID!"},
+	}
+	_query, _vars := buildMutation("deleteTweet", _m.Data, _typedVars)
 	return GraphQLRequest{
-		Query:         BuildQuery(_m),
+		Query:         _query,
 		OperationName: "deleteTweet",
-		Variables: map[string]interface{}{
-			"id": _id,
-		},
+		Variables:     _vars,
 	}
 }
 
@@ -65,11 +69,13 @@ type MarkTweetReadMutation struct {
 func (_m MarkTweetReadMutation) Build(
 	_id interface{},
 ) GraphQLRequest {
+	_typedVars := map[string]valueAndType{
+		"id": {value: _id, graphType: "ID!"},
+	}
+	_query, _vars := buildMutation("markTweetRead", _m.Data, _typedVars)
 	return GraphQLRequest{
-		Query:         BuildQuery(_m),
+		Query:         _query,
 		OperationName: "markTweetRead",
-		Variables: map[string]interface{}{
-			"id": _id,
-		},
+		Variables:     _vars,
 	}
 }

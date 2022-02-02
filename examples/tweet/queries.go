@@ -33,12 +33,14 @@ func (_q TweetQuery) Build(
 	_id interface{},
 ) GraphQLRequest {
 	_q.Operation = operationName
+	_typedVars := map[string]valueAndType{
+		"id": {value: _id, graphType: "ID!"},
+	}
+	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
 	return GraphQLRequest{
-		Query:         BuildQuery(_q),
+		Query:         _query,
 		OperationName: operationName,
-		Variables: map[string]interface{}{
-			"id": _id,
-		},
+		Variables:     _vars,
 	}
 }
 
@@ -69,15 +71,17 @@ func (_q TweetsQuery) Build(
 	_sort_order string,
 ) GraphQLRequest {
 	_q.Operation = operationName
+	_typedVars := map[string]valueAndType{
+		"limit":      {value: _limit, graphType: "Int"},
+		"skip":       {value: _skip, graphType: "Int"},
+		"sort_field": {value: _sort_field, graphType: "String"},
+		"sort_order": {value: _sort_order, graphType: "String"},
+	}
+	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
 	return GraphQLRequest{
-		Query:         BuildQuery(_q),
+		Query:         _query,
 		OperationName: operationName,
-		Variables: map[string]interface{}{
-			"limit":      _limit,
-			"skip":       _skip,
-			"sort_field": _sort_field,
-			"sort_order": _sort_order,
-		},
+		Variables:     _vars,
 	}
 }
 
@@ -102,10 +106,12 @@ func (_q TweetsMetaQuery) Build(
 	operationName string, // cannot be emtpy
 ) GraphQLRequest {
 	_q.Operation = operationName
+	_typedVars := map[string]valueAndType{}
+	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
 	return GraphQLRequest{
-		Query:         BuildQuery(_q),
+		Query:         _query,
 		OperationName: operationName,
-		Variables:     map[string]interface{}{},
+		Variables:     _vars,
 	}
 }
 
@@ -131,12 +137,14 @@ func (_q UserQuery) Build(
 	_id interface{},
 ) GraphQLRequest {
 	_q.Operation = operationName
+	_typedVars := map[string]valueAndType{
+		"id": {value: _id, graphType: "ID!"},
+	}
+	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
 	return GraphQLRequest{
-		Query:         BuildQuery(_q),
+		Query:         _query,
 		OperationName: operationName,
-		Variables: map[string]interface{}{
-			"id": _id,
-		},
+		Variables:     _vars,
 	}
 }
 
@@ -162,12 +170,14 @@ func (_q NotificationsQuery) Build(
 	_limit int32,
 ) GraphQLRequest {
 	_q.Operation = operationName
+	_typedVars := map[string]valueAndType{
+		"limit": {value: _limit, graphType: "Int"},
+	}
+	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
 	return GraphQLRequest{
-		Query:         BuildQuery(_q),
+		Query:         _query,
 		OperationName: operationName,
-		Variables: map[string]interface{}{
-			"limit": _limit,
-		},
+		Variables:     _vars,
 	}
 }
 
@@ -192,10 +202,12 @@ func (_q NotificationsMetaQuery) Build(
 	operationName string, // cannot be emtpy
 ) GraphQLRequest {
 	_q.Operation = operationName
+	_typedVars := map[string]valueAndType{}
+	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
 	return GraphQLRequest{
-		Query:         BuildQuery(_q),
+		Query:         _query,
 		OperationName: operationName,
-		Variables:     map[string]interface{}{},
+		Variables:     _vars,
 	}
 }
 
@@ -220,9 +232,11 @@ func (_q CurrentFilterQuery) Build(
 	operationName string, // cannot be emtpy
 ) GraphQLRequest {
 	_q.Operation = operationName
+	_typedVars := map[string]valueAndType{}
+	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
 	return GraphQLRequest{
-		Query:         BuildQuery(_q),
+		Query:         _query,
 		OperationName: operationName,
-		Variables:     map[string]interface{}{},
+		Variables:     _vars,
 	}
 }

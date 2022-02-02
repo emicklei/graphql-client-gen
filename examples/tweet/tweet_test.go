@@ -33,7 +33,10 @@ func TestTweetQuery(t *testing.T) {
 			Limit: 10,
 		},
 	}
-	t.Log("\n", BuildQuery(q))
+	tv := map[string]valueAndType{}
+	s, v := buildQuery("doit", q, tv)
+	t.Log("\n", s)
+	t.Log("\n", v)
 }
 
 var Get = struct {

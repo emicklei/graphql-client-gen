@@ -15,7 +15,7 @@ var (
 //
 // Responders(limit:Int!):[User!]
 type TweetRespondersFunction struct {
-	Limit int32 `graphql-function-arg:"limit"`
+	Limit int32 `graphql-function-arg:"limit" graphql-function-type:"Int!"`
 	// Result captures the query response part of this function.
 	Result []User `graphql:"inline"`
 }

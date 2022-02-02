@@ -38,14 +38,16 @@ func (_q {{.FunctionName}}Query) Build(
 	{{- end }}
 ) GraphQLRequest {
 	_q.Operation = operationName
+	_typedVars := map[string]valueAndType{
+		{{- range .Arguments}}
+		"{{.JSONName}}": {value:{{.Name}},graphType:"{{.GraphType}}"},
+		{{- end }}
+	}
+	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
 	return GraphQLRequest{
-		Query:         BuildQuery(_q),
+		Query:         _query,
 		OperationName: operationName,
-		Variables: map[string]interface{}{
-			{{- range .Arguments}}
-			"{{.JSONName}}": {{.Name}},
-			{{- end }}
-		},
+		Variables:     _vars,
 	}
 }
 

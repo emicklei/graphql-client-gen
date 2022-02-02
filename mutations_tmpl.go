@@ -28,14 +28,16 @@ func (_m {{.FunctionName}}Mutation) Build(
 		{{.Name}} {{.Type}}, 
 		{{- end }}
 	) GraphQLRequest { 
+	_typedVars := map[string]valueAndType{
+		{{- range .Arguments}}
+		"{{.JSONName}}": {value:{{.Name}},graphType:"{{.GraphType}}"},
+		{{- end }}
+	}	
+	_query, _vars := buildMutation("{{.Name}}", _m.Data, _typedVars)
 	return GraphQLRequest{
-		Query: BuildQuery(_m),
+		Query:         _query,
 		OperationName: "{{.Name}}",
-		Variables: map[string]interface{}{
-			{{- range .Arguments}}
-			"{{.JSONName}}": {{.Name}},
-			{{- end }}
-		},
+		Variables:     _vars,
 	}
 }
 

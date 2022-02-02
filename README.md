@@ -42,3 +42,4 @@ The `gcg` requires a schema in SDL. If you need to convert it from JSON then you
 # todo
  
 - make options for function
+- __typename

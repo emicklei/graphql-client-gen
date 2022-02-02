@@ -46,7 +46,8 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 			od.Arguments = append(od.Arguments, Argument{
 				Name:     goArgName(arg.Name),
 				JSONName: arg.Name,
-				Type:     g.mapScalar(arg.Type.Name()), IsArray: isArray(arg.Type)})
+				Type:     g.mapScalar(arg.Type.Name()), IsArray: isArray(arg.Type),
+				GraphType: arg.Type.String()})
 		}
 		fmt.Fprintf(tag, ")\" json:\"%s\"`", other.Name)
 		od.ReturnFieldTag = tag.String()

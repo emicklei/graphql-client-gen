@@ -11,17 +11,47 @@ import (
 	"strings"
 )
 
-func BuildQuery(q interface{}) string {
+func buildQuery(op string, q interface{}, typedVars map[string]valueAndType) (string, map[string]interface{}) {
 	b := new(bytes.Buffer)
-	writeQuery(q, b, 0, false)
-	return b.String()
+	writeQuery(q, b, 0, false, typedVars)
+	body := b.String()
+	s := new(bytes.Buffer)
+	for k, v := range typedVars {
+		if s.Len() > 0 {
+			io.WriteString(s, ",")
+		}
+		fmt.Fprintf(s, "$%s:%v", k, v.graphType)
+	}
+	vars := map[string]interface{}{}
+	for k, v := range typedVars {
+		vars[k] = v.value
+	}
+	return fmt.Sprintf("query %s(%s)\n{%s\n}", op, s.String(), body), vars
 }
 
-func writeQuery(q interface{}, w io.Writer, indent int, inline bool) {
+func buildMutation(op string, q interface{}, typedVars map[string]valueAndType) (string, map[string]interface{}) {
+	b := new(bytes.Buffer)
+	writeQuery(q, b, 0, false, typedVars)
+	body := b.String()
+	s := new(bytes.Buffer)
+	for k, v := range typedVars {
+		if s.Len() > 0 {
+			io.WriteString(s, ",")
+		}
+		fmt.Fprintf(s, "$%s:%v", k, v.graphType)
+	}
+	vars := map[string]interface{}{}
+	for k, v := range typedVars {
+		vars[k] = v.value
+	}
+	return fmt.Sprintf("mutation %s(%s)\n{%s\n}", op, s.String(), body), vars
+}
+
+func writeQuery(q interface{}, w io.Writer, indent int, inline bool, vars map[string]valueAndType) {
 	rt := reflect.TypeOf(q)
 	rv := reflect.ValueOf(q)
 	if rt.Kind() == reflect.Ptr {
-		writeQuery(rv.Elem().Interface(), w, indent, inline)
+		writeQuery(rv.Elem().Interface(), w, indent, inline, vars)
 		return
 	}
 	for i := 0; i < rt.NumField(); i++ {
@@ -38,7 +68,7 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool) {
 					fv = fv.Elem()
 				}
 				if k.Kind() == reflect.Struct {
-					writeQuery(fv.Interface(), w, indent, inlineField)
+					writeQuery(fv.Interface(), w, indent, inlineField, vars)
 				}
 			} else {
 				// no inline
@@ -50,40 +80,49 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool) {
 							op = "unsetOperation"
 						}
 						tag = strings.Replace(tag, "OperationName", op, -1)
+						// arguments of operation is derived from all vars used in the query
+						fmt.Fprintf(w, "\t%s(....)", tag)
+						continue
 					}
 					fmt.Fprintf(w, "\t%s", tag)
-					// is struct or pointer to struct
-					k := sf.Type
-					if k.Kind() == reflect.Ptr {
-						k = k.Elem()
-						fv = fv.Elem()
-					}
-					if k.Kind() == reflect.Struct {
-						writeStruct(fv.Interface(), w, indent, inlineField)
-					} else if k.Kind() == reflect.Slice {
-						// take first if avail
-						if fv.Len() > 0 {
-							// always struct? TODO
-							writeStruct(fv.Index(0).Interface(), w, indent, inline)
-						}
-					} else {
-						io.WriteString(w, "\n")
-					}
-					io.WriteString(w, strings.Repeat("\t", indent))
+					noInlineWriteField(sf, fv, w, indent, false, vars)
 				}
 			}
 		}
 	}
 }
 
-func writeStruct(structValue interface{}, w io.Writer, indent int, inline bool) {
+func noInlineWriteField(sf reflect.StructField, fv reflect.Value, w io.Writer, indent int, inline bool, vars map[string]valueAndType) {
+	// is struct or pointer to struct
+	k := sf.Type
+	if k.Kind() == reflect.Ptr {
+		k = k.Elem()
+		fv = fv.Elem()
+	}
+	if k.Kind() == reflect.Struct {
+		writeStruct(fv.Interface(), w, indent, false, vars)
+	} else if k.Kind() == reflect.Slice {
+		// take first if avail
+		if fv.Len() > 0 {
+			// always struct? TODO
+			writeStruct(fv.Index(0).Interface(), w, indent, inline, vars)
+		}
+	} else {
+		io.WriteString(w, "\n")
+	}
+	io.WriteString(w, strings.Repeat("\t", indent))
+}
+
+func writeStruct(structValue interface{}, w io.Writer, indent int, inline bool, vars map[string]valueAndType) {
 	if list := collectionFunctionArgs(structValue); len(list) > 0 {
 		io.WriteString(w, "(")
 		for i, each := range list {
 			if i > 0 {
 				fmt.Fprintf(w, ",")
 			}
-			fmt.Fprintf(w, "%s:%v", each.k, each.v)
+			varName := fmt.Sprintf("%s%d", each.name, len(vars))
+			fmt.Fprintf(w, "%s:$%s", each.name, varName)
+			vars[varName] = each
 		}
 		io.WriteString(w, ")")
 	}
@@ -94,16 +133,17 @@ func writeStruct(structValue interface{}, w io.Writer, indent int, inline bool) 
 	}
 	io.WriteString(w, " {\n")
 	io.WriteString(w, strings.Repeat("\t", indent+1))
-	writeQuery(structValue, w, indent+1, inline)
+	writeQuery(structValue, w, indent+1, inline, vars)
 	io.WriteString(w, "}\n")
 }
 
-type kv struct {
-	k string
-	v interface{}
+type valueAndType struct {
+	name      string
+	value     interface{}
+	graphType string
 }
 
-func collectionFunctionArgs(structValue interface{}) (list []kv) {
+func collectionFunctionArgs(structValue interface{}) (list []valueAndType) {
 	rt := reflect.TypeOf(structValue)
 	rv := reflect.ValueOf(structValue)
 	for i := 0; i < rt.NumField(); i++ {
@@ -112,7 +152,8 @@ func collectionFunctionArgs(structValue interface{}) (list []kv) {
 		if !fv.IsZero() {
 			tag, ok := ft.Tag.Lookup("graphql-function-arg")
 			if ok {
-				list = append(list, kv{k: tag, v: fv.Interface()})
+				gt, _ := ft.Tag.Lookup("graphql-function-type")
+				list = append(list, valueAndType{name: tag, value: fv.Interface(), graphType: gt})
 			}
 		}
 	}

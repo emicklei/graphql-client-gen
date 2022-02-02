@@ -44,10 +44,11 @@ func (g *Generator) handleQueries(def *ast.Definition) error {
 				}
 				fmt.Fprintf(tag, "%s: $%s", arg.Name, arg.Name)
 				op.Arguments = append(op.Arguments, Argument{
-					Name:     goArgName(arg.Name),
-					JSONName: arg.Name,
-					Type:     g.mapScalar(arg.Type.Name()),
-					IsArray:  isArray(arg.Type)})
+					Name:      goArgName(arg.Name),
+					JSONName:  arg.Name,
+					Type:      g.mapScalar(arg.Type.Name()),
+					GraphType: arg.Type.String(),
+					IsArray:   isArray(arg.Type)})
 			}
 			fmt.Fprintf(tag, ")")
 		}
