@@ -38,6 +38,7 @@ func (g *Generator) handleFunctions() error {
 			Name:       each.Type,
 			IsArray:    each.IsArray,
 			ReturnType: each.ReturnType,
+			ResultTag:  "`graphql:\"inline\"`",
 		}
 		for _, other := range each.Arguments {
 			// todo refactor this, is now copy of types.go occurrence

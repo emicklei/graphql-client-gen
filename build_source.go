@@ -26,7 +26,7 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool) {
 		if !fv.IsZero() {
 			sf := rt.Field(i)
 			tag, ok := sf.Tag.Lookup("graphql")
-			inlineField := sf.Anonymous && !ok
+			inlineField := tag == "inline" || (sf.Anonymous && !ok)
 			if inlineField {
 				// is struct or pointer to struct
 				k := sf.Type

@@ -17,7 +17,7 @@ var (
 type TweetRespondersFunction struct {
 	Limit int32 `graphql-function-arg:"limit"`
 	// Result captures the query response part of this function.
-	Result []User
+	Result []User `graphql:"inline"`
 }
 
 func (f *TweetRespondersFunction) UnmarshalJSON(data []byte) error {

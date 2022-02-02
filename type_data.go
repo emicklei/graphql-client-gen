@@ -64,6 +64,7 @@ type FunctionData struct {
 	Fields     []FieldData
 	IsArray    bool
 	ReturnType string
+	ResultTag  string
 }
 
 type UnionData struct {

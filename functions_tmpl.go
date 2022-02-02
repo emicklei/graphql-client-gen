@@ -23,7 +23,7 @@ type {{.Name}} struct {
 	{{.Name}} {{if .Optional}} *{{else}} {{end}}{{if .IsArray}}[]{{end}}{{.Type}} {{.Tag}}
 	{{- end}} 
 	// Result captures the query response part of this function.
-	Result {{if .IsArray}}[]{{end}}{{.ReturnType}} 
+	Result {{if .IsArray}}[]{{end}}{{.ReturnType}} {{.ResultTag}}
 }
 
 func (f *{{.Name}}) UnmarshalJSON(data []byte) error {
