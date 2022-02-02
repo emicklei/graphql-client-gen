@@ -1,7 +1,9 @@
 package gcg
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"text/template"
 
@@ -43,6 +45,7 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 				if len(other.Arguments) > 0 {
 					functionType := each.Name + fieldName(other.Name) + "Function"
 					fnc := Function{
+						Signature:  composeFunctionSignature(other),
 						Type:       functionType,
 						Arguments:  other.Arguments,
 						IsArray:    isArray(other.Type),
@@ -63,6 +66,26 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 		}
 	}
 	return tmpl.Execute(out, fd)
+}
+
+func composeFunctionSignature(other *ast.FieldDefinition) string {
+	b := new(bytes.Buffer)
+	io.WriteString(b, other.Name)
+	if len(other.Arguments) > 0 {
+		io.WriteString(b, "(")
+		for i, each := range other.Arguments {
+			if i > 0 {
+				io.WriteString(b, ",")
+			}
+			io.WriteString(b, each.Name)
+			io.WriteString(b, ":")
+			io.WriteString(b, each.Type.String())
+		}
+		io.WriteString(b, ")")
+	}
+	io.WriteString(b, ":")
+	io.WriteString(b, other.Type.String())
+	return b.String()
 }
 
 func (g *Generator) buildFieldData(other *ast.FieldDefinition) FieldData {

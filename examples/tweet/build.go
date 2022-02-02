@@ -87,6 +87,11 @@ func writeStruct(structValue interface{}, w io.Writer, indent int, inline bool) 
 		}
 		io.WriteString(w, ")")
 	}
+	// do not write empty nested structure if no fields are requested
+	if reflect.ValueOf(structValue).IsZero() {
+		io.WriteString(w, "\n")
+		return
+	}
 	io.WriteString(w, " {\n")
 	io.WriteString(w, strings.Repeat("\t", indent+1))
 	writeQuery(structValue, w, indent+1, inline)

@@ -4,6 +4,20 @@ import (
 	"testing"
 )
 
+/**
+	id
+	body
+	Author {
+			username
+	}
+	Stats {
+			views
+			likes
+	}
+	Responders(limit:10) {
+		id
+	}
+**/
 func TestTweetQuery(t *testing.T) {
 	q := Tweet{
 		ID:   Get.ID,
@@ -17,9 +31,6 @@ func TestTweetQuery(t *testing.T) {
 		},
 		Responders: &TweetRespondersFunction{
 			Limit: 10,
-			User: User{
-				ID: Get.ID,
-			},
 		},
 	}
 	t.Log("\n", BuildQuery(q))

@@ -9,6 +9,7 @@ import (
 )
 
 type Function struct {
+	Signature   string
 	Type        string
 	Description string
 	Arguments   ast.ArgumentDefinitionList
@@ -33,7 +34,7 @@ func (g *Generator) handleFunctions() error {
 	}
 	for _, each := range g.functions {
 		fnd := FunctionData{
-			Comment:    formatComment(each.Description),
+			Comment:    fmt.Sprintf("%s\n// %s", formatComment(each.Description), each.Signature),
 			Name:       each.Type,
 			IsArray:    each.IsArray,
 			ReturnType: each.ReturnType,
