@@ -22,12 +22,12 @@ type {{.Name}} struct {
 	// {{.Comment}}{{- end}}
 	{{.Name}} {{if .Optional}} *{{else}} {{end}}{{if .IsArray}}[]{{end}}{{.Type}} {{.Tag}}
 	{{- end}} 
-	// Returned captures the query response part of this function.
-	Returned {{if .IsArray}}[]{{end}}{{.ReturnType}} 
+	// Result captures the query response part of this function.
+	Result {{if .IsArray}}[]{{end}}{{.ReturnType}} 
 }
 
 func (f *{{.Name}}) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &f.Returned)
+	return json.Unmarshal(data, &f.Result)
 }
 {{- end}}
 `
