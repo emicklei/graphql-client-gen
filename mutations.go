@@ -51,18 +51,7 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 		}
 		fmt.Fprintf(tag, ")\" json:\"%s\"`", other.Name)
 		od.ReturnFieldTag = tag.String()
-		// build data field tag
-		// `graphql:"mutation createGrouping($input: GroupingInput!, $pritSheetID: ID!, $repositoryID: ID!)"`
-		tag = new(bytes.Buffer)
-		fmt.Fprintf(tag, "`graphql:\"mutation %s(", other.Name)
-		for i, arg := range other.Arguments {
-			if i > 0 {
-				fmt.Fprintf(tag, ",")
-			}
-			fmt.Fprintf(tag, "$%s: %s", arg.Name, arg.Type.String())
-		}
-		fmt.Fprintf(tag, ")\"`")
-		od.DataTag = tag.String()
+		od.DataTag = "`graphql:\"mutation\"`"
 		fd.Mutations = append(fd.Mutations, od)
 	}
 	return tmpl.Execute(out, fd)

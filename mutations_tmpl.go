@@ -33,12 +33,7 @@ func (_m {{.FunctionName}}Mutation) Build(
 		"{{.JSONName}}": {value:{{.Name}},graphType:"{{.GraphType}}"},
 		{{- end }}
 	}	
-	_query, _vars := buildMutation("{{.Name}}", _m.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: "{{.Name}}",
-		Variables:     _vars,
-	}
+	return buildRequest("mutation","{{.Name}}", _m.Data, _typedVars)
 }
 
 {{- end }}

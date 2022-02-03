@@ -15,3 +15,4 @@ gen:
 	gofmt -w build.go
 	gofmt -w functions.go
 	gofmt -w unions.go
+	go test

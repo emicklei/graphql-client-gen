@@ -54,22 +54,7 @@ func (g *Generator) handleQueries(def *ast.Definition) error {
 		}
 		fmt.Fprintf(tag, "\" json:\"%s\"`", each.Name)
 		op.ReturnFieldTag = tag.String()
-		// build data field tag
-		// `graphql:"query OperationName($id: ID!)"`
-		tag = new(bytes.Buffer)
-		fmt.Fprintf(tag, "`graphql:\"query OperationName")
-		if len(each.Arguments) > 0 {
-			fmt.Fprint(tag, "(")
-			for i, arg := range each.Arguments {
-				if i > 0 {
-					fmt.Fprintf(tag, ",")
-				}
-				fmt.Fprintf(tag, "$%s: %s", arg.Name, arg.Type.String())
-			}
-			fmt.Fprintf(tag, ")")
-		}
-		fmt.Fprint(tag, "\"`")
-		op.DataTag = tag.String()
+		op.DataTag = "`graphql:\"query\"`"
 		fd.Queries = append(fd.Queries, op)
 	}
 	return tmpl.Execute(out, fd)

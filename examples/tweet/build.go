@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func buildQuery(op string, q interface{}, typedVars map[string]valueAndType) (string, map[string]interface{}) {
+func buildRequest(mq string, op string, q interface{}, typedVars map[string]valueAndType) GraphQLRequest {
 	b := new(bytes.Buffer)
 	writeQuery(q, b, 0, false, typedVars)
 	body := b.String()
@@ -26,25 +26,11 @@ func buildQuery(op string, q interface{}, typedVars map[string]valueAndType) (st
 	for k, v := range typedVars {
 		vars[k] = v.value
 	}
-	return fmt.Sprintf("query %s(%s)\n{%s\n}", op, s.String(), body), vars
-}
-
-func buildMutation(op string, q interface{}, typedVars map[string]valueAndType) (string, map[string]interface{}) {
-	b := new(bytes.Buffer)
-	writeQuery(q, b, 0, false, typedVars)
-	body := b.String()
-	s := new(bytes.Buffer)
-	for k, v := range typedVars {
-		if s.Len() > 0 {
-			io.WriteString(s, ",")
-		}
-		fmt.Fprintf(s, "$%s:%v", k, v.graphType)
+	return GraphQLRequest{
+		Query:         fmt.Sprintf("%s %s(%s)\n{%s\n}", mq, op, s.String(), body),
+		OperationName: op,
+		Variables:     vars,
 	}
-	vars := map[string]interface{}{}
-	for k, v := range typedVars {
-		vars[k] = v.value
-	}
-	return fmt.Sprintf("mutation %s(%s)\n{%s\n}", op, s.String(), body), vars
 }
 
 func writeQuery(q interface{}, w io.Writer, indent int, inline bool, vars map[string]valueAndType) {
@@ -54,45 +40,42 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool, vars map[st
 		writeQuery(rv.Elem().Interface(), w, indent, inline, vars)
 		return
 	}
+	if rt.Kind() == reflect.Slice {
+		// take first if avail
+		if rv.Len() > 0 {
+			writeQuery(rv.Index(0).Interface(), w, indent, inline, vars)
+		}
+		return
+	}
 	for i := 0; i < rt.NumField(); i++ {
 		fv := rv.Field(i)
-		if !fv.IsZero() {
-			sf := rt.Field(i)
-			tag, ok := sf.Tag.Lookup("graphql")
-			inlineField := tag == "inline" || (sf.Anonymous && !ok)
-			if inlineField {
-				// is struct or pointer to struct
-				k := sf.Type
-				if k.Kind() == reflect.Ptr {
-					k = k.Elem()
-					fv = fv.Elem()
-				}
-				if k.Kind() == reflect.Struct {
-					writeQuery(fv.Interface(), w, indent, inlineField, vars)
-				}
-			} else {
-				// no inline
-				if ok {
-					// handle operation override for query
-					if overrides, ok := q.(OverridesOperationName); ok {
-						op := overrides.OperationName()
-						if op == "" {
-							op = "unsetOperation"
-						}
-						tag = strings.Replace(tag, "OperationName", op, -1)
-						// arguments of operation is derived from all vars used in the query
-						fmt.Fprintf(w, "\t%s(....)", tag)
-						continue
-					}
-					fmt.Fprintf(w, "\t%s", tag)
-					noInlineWriteField(sf, fv, w, indent, false, vars)
-				}
+		if fv.IsZero() {
+			continue
+		}
+		sf := rt.Field(i)
+		tag, ok := sf.Tag.Lookup("graphql")
+		inlineField := tag == "inline" || (sf.Anonymous && !ok)
+		if inlineField {
+			// is struct or pointer to struct
+			k := sf.Type
+			if k.Kind() == reflect.Ptr {
+				k = k.Elem()
+				fv = fv.Elem()
+			}
+			if k.Kind() == reflect.Struct {
+				writeQuery(fv.Interface(), w, indent, inlineField, vars)
+			}
+		} else {
+			// no inline
+			if ok {
+				fmt.Fprintf(w, "\t%s", tag)
+				writeField(sf, fv, w, indent, false, vars)
 			}
 		}
 	}
 }
 
-func noInlineWriteField(sf reflect.StructField, fv reflect.Value, w io.Writer, indent int, inline bool, vars map[string]valueAndType) {
+func writeField(sf reflect.StructField, fv reflect.Value, w io.Writer, indent int, inline bool, vars map[string]valueAndType) {
 	// is struct or pointer to struct
 	k := sf.Type
 	if k.Kind() == reflect.Ptr {

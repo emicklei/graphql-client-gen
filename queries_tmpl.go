@@ -16,18 +16,12 @@ var (
 
 // {{.FunctionName}}Query is used for both specifying the query and capturing the response. {{.Comment}}
 type {{.FunctionName}}Query struct {
-	Operation string
 	Errors Errors {{.ErrorsTag}}
 	Data      {{if .IsArray}}[]{{end}}{{.FunctionName}}QueryData {{.DataTag}}
 }
 
 type {{.FunctionName}}QueryData struct {
 	{{.ReturnType}} {{.ReturnFieldTag}}
-}
-
-// OperationName returns the actual query operation name that is used to replace "OperationName"
-func (q {{.FunctionName}}Query) OperationName() string {
-	return q.Operation
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -37,18 +31,12 @@ func (_q {{.FunctionName}}Query) Build(
 	{{.Name}} {{.Type}}, 
 	{{- end }}
 ) GraphQLRequest {
-	_q.Operation = operationName
 	_typedVars := map[string]valueAndType{
 		{{- range .Arguments}}
 		"{{.JSONName}}": {value:{{.Name}},graphType:"{{.GraphType}}"},
 		{{- end }}
 	}
-	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: operationName,
-		Variables:     _vars,
-	}
+	return buildRequest("query",operationName, _q.Data, _typedVars)
 }
 
 {{- end}}

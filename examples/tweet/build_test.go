@@ -1,7 +1,6 @@
 package tweet
 
 import (
-	"strings"
 	"testing"
 )
 
@@ -17,13 +16,13 @@ type Root struct {
 	Name          string             `graphql:"name"`
 	Array1        []Child            // no tag
 	Array2        []Child            `graphql:"array2"`
-	FunctionField *ScalarFunction    `graphql:"title(asUppercase: $asUppercase)"`
+	FunctionField *ScalarFunction    `graphql:"title"`
 	NoValue       int
 }
 
 type ScalarFunction struct {
 	// input
-	AsUppercase bool `graphql-function-arg:"asUppercase"`
+	AsUppercase bool `graphql-function-arg:"asUppercase" graphql-function-type:"Boolean"`
 	// output
 	string
 }
@@ -35,16 +34,12 @@ func TestBuildQueryRoot(t *testing.T) {
 			{ID: "?"},
 		},
 		Shared: Shared{Arg: 42, Valid: true},
-		// FunctionField: &ScalarFunction{
-		// 	AsUppercase: true,
-		// },
+		FunctionField: &ScalarFunction{
+			AsUppercase: true,
+		},
 	}
 	tv := map[string]valueAndType{}
-	q, vars := buildQuery("op", r, tv)
-	t.Log("\n", q)
-	t.Log("\n", vars)
-	sani := strings.ReplaceAll(strings.ReplaceAll(q, "\n", " "), "\t", "")
-	if got, want := sani, "shared(arg:42) { valid } name array2 { id } "; got != want {
-		t.Errorf("got [%v]:%T want [%v]:%T", got, got, want, want)
-	}
+	req := buildRequest("query", "op", r, tv)
+	t.Log("\n", req.Query)
+	t.Log("\n", req.Variables)
 }

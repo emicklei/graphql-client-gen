@@ -16,7 +16,7 @@ type CreateTweetMutation struct {
 	Errors Errors `json:"errors"`
 	Data   struct {
 		Tweet `graphql:"createTweet(body: $body)" json:"createTweet"`
-	} `graphql:"mutation createTweet($body: String)"`
+	} `graphql:"mutation"`
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -26,12 +26,7 @@ func (_m CreateTweetMutation) Build(
 	_typedVars := map[string]valueAndType{
 		"body": {value: _body, graphType: "String"},
 	}
-	_query, _vars := buildMutation("createTweet", _m.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: "createTweet",
-		Variables:     _vars,
-	}
+	return buildRequest("mutation", "createTweet", _m.Data, _typedVars)
 }
 
 // DeleteTweetMutation is used for both specifying the query and capturing the response.
@@ -39,7 +34,7 @@ type DeleteTweetMutation struct {
 	Errors Errors `json:"errors"`
 	Data   struct {
 		Tweet `graphql:"deleteTweet(id: $id)" json:"deleteTweet"`
-	} `graphql:"mutation deleteTweet($id: ID!)"`
+	} `graphql:"mutation"`
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -49,12 +44,7 @@ func (_m DeleteTweetMutation) Build(
 	_typedVars := map[string]valueAndType{
 		"id": {value: _id, graphType: "ID!"},
 	}
-	_query, _vars := buildMutation("deleteTweet", _m.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: "deleteTweet",
-		Variables:     _vars,
-	}
+	return buildRequest("mutation", "deleteTweet", _m.Data, _typedVars)
 }
 
 // MarkTweetReadMutation is used for both specifying the query and capturing the response.
@@ -62,7 +52,7 @@ type MarkTweetReadMutation struct {
 	Errors Errors `json:"errors"`
 	Data   struct {
 		bool `graphql:"markTweetRead(id: $id)" json:"markTweetRead"`
-	} `graphql:"mutation markTweetRead($id: ID!)"`
+	} `graphql:"mutation"`
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -72,10 +62,5 @@ func (_m MarkTweetReadMutation) Build(
 	_typedVars := map[string]valueAndType{
 		"id": {value: _id, graphType: "ID!"},
 	}
-	_query, _vars := buildMutation("markTweetRead", _m.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: "markTweetRead",
-		Variables:     _vars,
-	}
+	return buildRequest("mutation", "markTweetRead", _m.Data, _typedVars)
 }

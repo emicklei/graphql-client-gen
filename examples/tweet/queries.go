@@ -13,18 +13,12 @@ var (
 
 // TweetQuery is used for both specifying the query and capturing the response.
 type TweetQuery struct {
-	Operation string
-	Errors    Errors         `json:"errors"`
-	Data      TweetQueryData `graphql:"query OperationName($id: ID!)"`
+	Errors Errors         `json:"errors"`
+	Data   TweetQueryData `graphql:"query"`
 }
 
 type TweetQueryData struct {
 	Tweet `graphql:"Tweet(id: $id)" json:"Tweet"`
-}
-
-// OperationName returns the actual query operation name that is used to replace "OperationName"
-func (q TweetQuery) OperationName() string {
-	return q.Operation
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -32,34 +26,22 @@ func (_q TweetQuery) Build(
 	operationName string, // cannot be emtpy
 	_id interface{},
 ) GraphQLRequest {
-	_q.Operation = operationName
 	_typedVars := map[string]valueAndType{
 		"id": {value: _id, graphType: "ID!"},
 	}
-	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: operationName,
-		Variables:     _vars,
-	}
+	return buildRequest("query", operationName, _q.Data, _typedVars)
 }
 
 // TweetsQuery is used for both specifying the query and capturing the response.
 // This is a
 // multine comment
 type TweetsQuery struct {
-	Operation string
-	Errors    Errors            `json:"errors"`
-	Data      []TweetsQueryData `graphql:"query OperationName($limit: Int,$skip: Int,$sort_field: String,$sort_order: String)"`
+	Errors Errors            `json:"errors"`
+	Data   []TweetsQueryData `graphql:"query"`
 }
 
 type TweetsQueryData struct {
 	Tweet `graphql:"Tweets(limit: $limit,skip: $skip,sort_field: $sort_field,sort_order: $sort_order)" json:"Tweets"`
-}
-
-// OperationName returns the actual query operation name that is used to replace "OperationName"
-func (q TweetsQuery) OperationName() string {
-	return q.Operation
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -70,65 +52,41 @@ func (_q TweetsQuery) Build(
 	_sort_field string,
 	_sort_order string,
 ) GraphQLRequest {
-	_q.Operation = operationName
 	_typedVars := map[string]valueAndType{
 		"limit":      {value: _limit, graphType: "Int"},
 		"skip":       {value: _skip, graphType: "Int"},
 		"sort_field": {value: _sort_field, graphType: "String"},
 		"sort_order": {value: _sort_order, graphType: "String"},
 	}
-	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: operationName,
-		Variables:     _vars,
-	}
+	return buildRequest("query", operationName, _q.Data, _typedVars)
 }
 
 // TweetsMetaQuery is used for both specifying the query and capturing the response.
 type TweetsMetaQuery struct {
-	Operation string
-	Errors    Errors              `json:"errors"`
-	Data      TweetsMetaQueryData `graphql:"query OperationName"`
+	Errors Errors              `json:"errors"`
+	Data   TweetsMetaQueryData `graphql:"query"`
 }
 
 type TweetsMetaQueryData struct {
 	Meta `graphql:"TweetsMeta" json:"TweetsMeta"`
 }
 
-// OperationName returns the actual query operation name that is used to replace "OperationName"
-func (q TweetsMetaQuery) OperationName() string {
-	return q.Operation
-}
-
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_q TweetsMetaQuery) Build(
 	operationName string, // cannot be emtpy
 ) GraphQLRequest {
-	_q.Operation = operationName
 	_typedVars := map[string]valueAndType{}
-	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: operationName,
-		Variables:     _vars,
-	}
+	return buildRequest("query", operationName, _q.Data, _typedVars)
 }
 
 // UserQuery is used for both specifying the query and capturing the response.
 type UserQuery struct {
-	Operation string
-	Errors    Errors        `json:"errors"`
-	Data      UserQueryData `graphql:"query OperationName($id: ID!)"`
+	Errors Errors        `json:"errors"`
+	Data   UserQueryData `graphql:"query"`
 }
 
 type UserQueryData struct {
 	User `graphql:"User(id: $id)" json:"User"`
-}
-
-// OperationName returns the actual query operation name that is used to replace "OperationName"
-func (q UserQuery) OperationName() string {
-	return q.Operation
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -136,32 +94,20 @@ func (_q UserQuery) Build(
 	operationName string, // cannot be emtpy
 	_id interface{},
 ) GraphQLRequest {
-	_q.Operation = operationName
 	_typedVars := map[string]valueAndType{
 		"id": {value: _id, graphType: "ID!"},
 	}
-	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: operationName,
-		Variables:     _vars,
-	}
+	return buildRequest("query", operationName, _q.Data, _typedVars)
 }
 
 // NotificationsQuery is used for both specifying the query and capturing the response.
 type NotificationsQuery struct {
-	Operation string
-	Errors    Errors                   `json:"errors"`
-	Data      []NotificationsQueryData `graphql:"query OperationName($limit: Int)"`
+	Errors Errors                   `json:"errors"`
+	Data   []NotificationsQueryData `graphql:"query"`
 }
 
 type NotificationsQueryData struct {
 	Notification `graphql:"Notifications(limit: $limit)" json:"Notifications"`
-}
-
-// OperationName returns the actual query operation name that is used to replace "OperationName"
-func (q NotificationsQuery) OperationName() string {
-	return q.Operation
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -169,74 +115,44 @@ func (_q NotificationsQuery) Build(
 	operationName string, // cannot be emtpy
 	_limit int32,
 ) GraphQLRequest {
-	_q.Operation = operationName
 	_typedVars := map[string]valueAndType{
 		"limit": {value: _limit, graphType: "Int"},
 	}
-	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: operationName,
-		Variables:     _vars,
-	}
+	return buildRequest("query", operationName, _q.Data, _typedVars)
 }
 
 // NotificationsMetaQuery is used for both specifying the query and capturing the response.
 type NotificationsMetaQuery struct {
-	Operation string
-	Errors    Errors                     `json:"errors"`
-	Data      NotificationsMetaQueryData `graphql:"query OperationName"`
+	Errors Errors                     `json:"errors"`
+	Data   NotificationsMetaQueryData `graphql:"query"`
 }
 
 type NotificationsMetaQueryData struct {
 	Meta `graphql:"NotificationsMeta" json:"NotificationsMeta"`
 }
 
-// OperationName returns the actual query operation name that is used to replace "OperationName"
-func (q NotificationsMetaQuery) OperationName() string {
-	return q.Operation
-}
-
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_q NotificationsMetaQuery) Build(
 	operationName string, // cannot be emtpy
 ) GraphQLRequest {
-	_q.Operation = operationName
 	_typedVars := map[string]valueAndType{}
-	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: operationName,
-		Variables:     _vars,
-	}
+	return buildRequest("query", operationName, _q.Data, _typedVars)
 }
 
 // CurrentFilterQuery is used for both specifying the query and capturing the response.
 type CurrentFilterQuery struct {
-	Operation string
-	Errors    Errors                 `json:"errors"`
-	Data      CurrentFilterQueryData `graphql:"query OperationName"`
+	Errors Errors                 `json:"errors"`
+	Data   CurrentFilterQueryData `graphql:"query"`
 }
 
 type CurrentFilterQueryData struct {
 	FilterValue `graphql:"CurrentFilter" json:"CurrentFilter"`
 }
 
-// OperationName returns the actual query operation name that is used to replace "OperationName"
-func (q CurrentFilterQuery) OperationName() string {
-	return q.Operation
-}
-
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_q CurrentFilterQuery) Build(
 	operationName string, // cannot be emtpy
 ) GraphQLRequest {
-	_q.Operation = operationName
 	_typedVars := map[string]valueAndType{}
-	_query, _vars := buildQuery(operationName, _q.Data, _typedVars)
-	return GraphQLRequest{
-		Query:         _query,
-		OperationName: operationName,
-		Variables:     _vars,
-	}
+	return buildRequest("query", operationName, _q.Data, _typedVars)
 }

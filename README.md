@@ -32,14 +32,22 @@ Create a configuration file `schema-generate.yaml` with the following contents:
 
 work in progress
 
-# convert schema JSON to SDL
+## convert schema JSON to SDL
 
 The `gcg` requires a schema in SDL. If you need to convert it from JSON then you can use the npm module.
 
 	npm i graphql-json-to-sdl
 	npx graphql-json-to-sdl schema.json schema.graphqls
 
-# todo
+### todo
  
 - make options for function
 - __typename
+
+## limitations
+
+Unsupported GraphQL features are:
+
+- inline fragments
+- directives
+- default values
