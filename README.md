@@ -1,6 +1,14 @@
 # gcg - graphql client generator
 
+This tool takes a GraphQL schema in SDL and generates Go sources for all entities (enums,mutations,types,queries,unions,functions).
+The generated types can be used both for composing GraphQL queries and populating response data.
+Queries and mutations are composed by setting field values in your (nested) structur to a non-zero value.
+
 Generated sources have no dependencies outside the standard Go SDK.
+
+## status
+
+work in progress
 
 ## prepare
 
@@ -41,9 +49,7 @@ Schema example (SDL):
     	Tweets(limit: Int, skip: Int, sort_field: String, sort_order: String): [Tweet]
 	}
 	type Mutation {
-    	createTweet (
-        	body: String
-    	): Tweet	
+    	createTweet (body: String): Tweet	
 	}
 
 With generated Go code from this schema, you can write queries and mutations.
@@ -51,8 +57,10 @@ With generated Go code from this schema, you can write queries and mutations.
 Create example:
 
 	m := CreateTweetMutation{}
+
 	// set non-zero value to mark the field as part of query
 	m.Data.ID = "?"
+
 	// build GraphQLRequest with query,operation and variables
 	r := m.Build("hello")
 
@@ -69,11 +77,9 @@ Read example:
 	q := TweetsQuery{}
 	q.Data = []TweetsQueryData{
 		{
-			// set non-zero value to mark the field as part of query
 			Tweet: Tweet{ID: "?"},
 		},
 	}
-	// build GraphQLRequest with query,operation and variables
 	r := q.Build("testTweets", 1, 0, "id", "desc")
 
 Read query 
@@ -83,10 +89,6 @@ Read query
 			id
 		}
 	}
-
-## status
-
-work in progress
 
 ## convert schema JSON to SDL
 
