@@ -8,24 +8,24 @@ import (
 	"strings"
 )
 
-func buildRequest(mq string, op string, q interface{}, typedVars map[string]valueAndType) GraphQLRequest {
-	b := new(bytes.Buffer)
-	writeQuery(q, b, 0, false, typedVars)
-	body := b.String()
-	s := new(bytes.Buffer)
+func buildRequest(mutationOrQuery string, operationName string, querySample interface{}, typedVars map[string]valueAndType) GraphQLRequest {
+	queryBody := new(bytes.Buffer)
+	writeQuery(querySample, queryBody, 0, false, typedVars)
+	body := queryBody.String()
+	signature := new(bytes.Buffer)
 	for k, v := range typedVars {
-		if s.Len() > 0 {
-			io.WriteString(s, ",")
+		if signature.Len() > 0 {
+			io.WriteString(signature, ",")
 		}
-		fmt.Fprintf(s, "$%s:%v", k, v.graphType)
+		fmt.Fprintf(signature, "$%s:%v", k, v.graphType)
 	}
 	vars := map[string]interface{}{}
 	for k, v := range typedVars {
 		vars[k] = v.value
 	}
 	return GraphQLRequest{
-		Query:         fmt.Sprintf("%s %s(%s)\n{%s\n}", mq, op, s.String(), body),
-		OperationName: op,
+		Query:         fmt.Sprintf("%s %s(%s) {\n%s}", mutationOrQuery, operationName, signature.String(), body),
+		OperationName: operationName,
 		Variables:     vars,
 	}
 }
@@ -127,14 +127,15 @@ func collectionFunctionArgs(structValue interface{}) (list []valueAndType) {
 	rt := reflect.TypeOf(structValue)
 	rv := reflect.ValueOf(structValue)
 	for i := 0; i < rt.NumField(); i++ {
-		ft := rt.Field(i)
 		fv := rv.Field(i)
-		if !fv.IsZero() {
-			tag, ok := ft.Tag.Lookup("graphql-function-arg")
-			if ok {
-				gt, _ := ft.Tag.Lookup("graphql-function-type")
-				list = append(list, valueAndType{name: tag, value: fv.Interface(), graphType: gt})
-			}
+		if fv.IsZero() {
+			continue
+		}
+		ft := rt.Field(i)
+		tag, ok := ft.Tag.Lookup("graphql-function-arg")
+		if ok {
+			gt, _ := ft.Tag.Lookup("graphql-function-type")
+			list = append(list, valueAndType{name: tag, value: fv.Interface(), graphType: gt})
 		}
 	}
 	return
