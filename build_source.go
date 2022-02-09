@@ -148,6 +148,15 @@ type GraphQLRequest struct {
 	Variables     map[string]interface{} `json:"variables"`
 }
 
+// NewGraphQLRequest returns a new Request (for query or mutation) with optional or empty variables.
+func NewGraphQLRequest(query, operation string, vars ...map[string]interface{}) GraphQLRequest {
+	initVars := map[string]interface{}{}
+	if len(vars) > 0 {
+		initVars = vars[0] // merge all?
+	}
+	return GraphQLRequest{Query: query, OperationName: operation, Variables: initVars}
+}
+
 // Errors is a response field to capture server reported problems
 type Errors struct {
 	Message   string `json:"message,omitempty"`

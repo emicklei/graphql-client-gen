@@ -66,7 +66,7 @@ Create example:
 	// build GraphQLRequest with query,operation and variables
 	r := m.Build("hello")
 
-Create query:
+Results in query:
 
 	mutation createTweet($body:String) {
 		createTweet(body: $body) {
@@ -76,6 +76,7 @@ Create query:
 
 Read Tweet ID from response
 
+	// use the CreateTweetMutation to capture the data
 	json.Unmarshal(responseBytes, &m)
 	id := m.Data.ID
 
@@ -89,7 +90,7 @@ Read example:
 	}
 	r := q.Build("testTweets", 1, 0, "id", "desc")
 
-Read query 
+Results in query 
 
 	query testTweets($limit:Int,$skip:Int,$sort_field:String,$sort_order:String) {
 		Tweets(limit: $limit,skip: $skip,sort_field: $sort_field,sort_order: $sort_order) {
@@ -99,20 +100,23 @@ Read query
 
 Read Tweet ID from response
 
+	// use the TweetsQuery to capture the data
 	json.Unmarshal(responseBytes, &q)
 	id := q.Data.Tweets[0].ID
 
-## convert schema JSON to SDL
+## how to post a GraphQLRequest
 
-The `gcg` program requires a schema in SDL. If you need to convert it from JSON then you can use the npm module.
-
-	npm i graphql-json-to-sdl
-	npx graphql-json-to-sdl schema.json schema.graphqls
+	request := GraphQLRequest{}
+	requestBytes, _ := json.Marshal(request)
+	requestReader := bytes.NewReader(requestBytes)
+	// if need to pass header then use http.NewRequest instead
+	_, _ = http.Post("http://your.service/api", "application/json", requestReader)
 
 ### todo
  
 - make optional arguments for function
 - __typename meta field
+- inputs with null values
 
 ## limitations
 
