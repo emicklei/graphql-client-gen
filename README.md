@@ -106,11 +106,12 @@ Read Tweet ID from response
 
 ## how to post a GraphQLRequest
 
-	request := GraphQLRequest{}
-	requestBytes, _ := json.Marshal(request)
+	request := aQueryOrMutation.Build(....)
+	requestBytes, err := json.Marshal(request)
 	requestReader := bytes.NewReader(requestBytes)
-	// if need to pass header then use http.NewRequest instead
-	_, _ = http.Post("http://your.service/api", "application/json", requestReader)
+
+	// if you need to pass headers then use http.NewRequest instead
+	resp , err = http.Post("http://your.service/api", "application/json", requestReader)
 
 ### todo
  
