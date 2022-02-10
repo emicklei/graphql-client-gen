@@ -1,0 +1,4 @@
+package: tests
+schema: schema.graphql
+bindings:
+  Date: CustomDate

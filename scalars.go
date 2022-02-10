@@ -21,6 +21,14 @@ func (g *Generator) handleScalars(all []*ast.Definition) error {
 	if err != nil {
 		return err
 	}
+	// unless it is defined by a binding
+	fd.IncludeScalarID = true
+	for _, each := range g.scalarBindings {
+		if each.GraphQLScalar == "ID" && each.GoTypeName != "interface{}" {
+			fd.IncludeScalarID = false
+			break
+		}
+	}
 	for _, each := range all {
 		sd := ScalarData{
 			Comment: formatComment(each.Description),

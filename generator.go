@@ -17,6 +17,7 @@ type ScalarBinding struct {
 }
 
 type Generator struct {
+	sourceFilename string
 	schemaSource   string
 	packageName    string
 	functions      []Function
@@ -49,7 +50,7 @@ func NewGenerator(schemaSource string, options ...Option) *Generator {
 }
 
 func (g *Generator) Generate() error {
-	doc, perr := parser.ParseSchema(&ast.Source{Input: g.schemaSource, Name: "test"})
+	doc, perr := parser.ParseSchema(&ast.Source{Input: g.schemaSource, Name: g.sourceFilename})
 	if perr != nil {
 		return perr
 	}

@@ -25,7 +25,7 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 		return err
 	}
 	for _, other := range each.Fields {
-		rt := g.mapScalar(other.Type.Name())
+		rt := other.Type.Name() // g.mapScalar(other.Type.Name())
 		od := OperationData{
 			Comment:      formatComment(other.Description),
 			Name:         other.Name,

@@ -16,3 +16,9 @@ func WithPackage(name string) func(*Generator) {
 		g.packageName = name
 	}
 }
+
+func WithSource(filename string) func(*Generator) {
+	return func(g *Generator) {
+		g.sourceFilename = filename
+	}
+}

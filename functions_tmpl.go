@@ -11,6 +11,7 @@ import (
 
 var (
 	_ = time.Now
+	_ = json.Unmarshal
 )
 
 {{- range .Functions}}

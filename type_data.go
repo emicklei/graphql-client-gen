@@ -1,15 +1,16 @@
 package gcg
 
 type FileData struct {
-	Package      string
-	BuildVersion string
-	Types        []TypeData
-	Enums        []EnumData
-	Mutations    []OperationData
-	Queries      []OperationData
-	Scalars      []ScalarData
-	Functions    []FunctionData
-	Unions       []UnionData
+	Package         string
+	BuildVersion    string
+	Types           []TypeData
+	Enums           []EnumData
+	Mutations       []OperationData
+	Queries         []OperationData
+	Scalars         []ScalarData
+	Functions       []FunctionData
+	Unions          []UnionData
+	IncludeScalarID bool
 }
 
 type Argument struct {

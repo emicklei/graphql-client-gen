@@ -68,7 +68,8 @@ func main() {
 
 	gen := gcg.NewGenerator(string(data),
 		gcg.WithScalarBindings(config.ScalarBindings),
-		gcg.WithPackage(config.PackageName))
+		gcg.WithPackage(config.PackageName),
+		gcg.WithSource(config.SchemaFile))
 
 	err = gen.Generate()
 	if err != nil {
