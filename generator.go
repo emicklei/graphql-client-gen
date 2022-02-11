@@ -23,6 +23,7 @@ type Generator struct {
 	functions      []Function
 	scalarBindings []ScalarBinding
 	mainVersion    string
+	schemaVersion  string
 }
 
 func NewGenerator(schemaSource string, options ...Option) *Generator {
@@ -54,6 +55,20 @@ func (g *Generator) Generate() error {
 	if perr != nil {
 		return perr
 	}
+	// get version if available
+	for _, s := range doc.Schema {
+		for _, each := range s.Directives {
+			if each.Name == "version" {
+				for _, other := range each.Arguments {
+					if other.Name == "name" {
+						g.schemaVersion = other.Value.Raw
+						break
+					}
+				}
+			}
+		}
+	}
+
 	if each := doc.Definitions.ForName("Mutation"); each != nil {
 		if err := g.handleMutations(each); err != nil {
 			return err

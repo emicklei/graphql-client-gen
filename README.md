@@ -113,6 +113,22 @@ Read Tweet ID from response
 	// if you need to pass headers then use http.NewRequest instead
 	resp , err = http.Post("http://your.service/api", "application/json", requestReader)
 
+## inject the schema version
+
+Using a directive, you can provide version information about the schema.
+The following example shows how to define this
+
+	directive @version(name:String="dev") on SCHEMA
+
+	schema @version(name:"v1.0.0") {
+		query: Query
+		mutation: Mutation
+	}
+
+Then the generator will initialize a constant in queries.go such as:
+
+	const SchemaVersion = "v1.0.0"
+
 ### todo
  
 - make optional arguments for function

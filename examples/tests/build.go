@@ -1,6 +1,6 @@
 package tests
 
-// copied from build_source.go by github.com/emicklei/graphql-client-gen/cmd/gcg version: (dev)
+// copied from build_source.go by github.com/emicklei/graphql-client-gen/cmd/gcg version: (devel)
 // DO NOT EDIT
 
 import (

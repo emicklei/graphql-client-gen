@@ -71,3 +71,10 @@ type Mutation {
 
 # END copy from Query    
 }
+
+directive @version(name:String="dev") on SCHEMA
+
+schema @version(name:"v1.0.0") {
+	query: Query
+	mutation: Mutation
+}

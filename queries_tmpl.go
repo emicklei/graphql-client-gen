@@ -12,6 +12,8 @@ var (
 	_ = time.Now
 )
 
+const SchemaVersion = "{{.SchemaVersion}}"
+
 {{- range .Queries}}
 
 // {{.FunctionName}}Query is used for both specifying the query and capturing the response. {{.Comment}}

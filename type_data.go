@@ -11,6 +11,7 @@ type FileData struct {
 	Functions       []FunctionData
 	Unions          []UnionData
 	IncludeScalarID bool
+	SchemaVersion   string
 }
 
 type Argument struct {

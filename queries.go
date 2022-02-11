@@ -17,8 +17,9 @@ func (g *Generator) handleQueries(def *ast.Definition) error {
 	}
 	defer out.Close()
 	fd := FileData{
-		Package:      g.packageName,
-		BuildVersion: g.mainVersion,
+		Package:       g.packageName,
+		BuildVersion:  g.mainVersion,
+		SchemaVersion: g.schemaVersion,
 	}
 	tmpl, err := template.New("tt").Parse(queriesTemplateSrc)
 	if err != nil {
