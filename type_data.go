@@ -22,15 +22,17 @@ type Argument struct {
 }
 
 type OperationData struct {
-	Comment        string
-	Name           string
-	FunctionName   string
-	Arguments      []Argument
-	ReturnType     string
-	ReturnFieldTag string
-	IsArray        bool
-	DataTag        string
-	ErrorsTag      string
+	Comment         string
+	Definition      string
+	Name            string
+	FunctionName    string
+	Arguments       []Argument
+	ReturnType      string
+	ReturnFieldName string
+	ReturnFieldTag  string
+	IsArray         bool
+	DataTag         string
+	ErrorsTag       string
 }
 
 type TypeData struct {

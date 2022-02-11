@@ -3,6 +3,7 @@ package gcg
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"text/template"
 
@@ -27,12 +28,13 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 	for _, other := range each.Fields {
 		rt := other.Type.Name() // g.mapScalar(other.Type.Name())
 		od := OperationData{
-			Comment:      formatComment(other.Description),
-			Name:         other.Name,
-			FunctionName: strcase.ToCamel(other.Name),
-			IsArray:      isArray(other.Type),
-			ReturnType:   rt,
-			ErrorsTag:    "`json:\"errors\"`",
+			Comment:         formatComment(other.Description),
+			Definition:      fieldDefinitionFor(other),
+			Name:            other.Name,
+			FunctionName:    strcase.ToCamel(other.Name),
+			IsArray:         isArray(other.Type),
+			ReturnFieldName: rt,
+			ErrorsTag:       "`json:\"errors\"`",
 		}
 		// build return field tag
 		// `graphql:"createGrouping(input:$input,pritSheetID:$pritSheetID,repositoryID:$repositoryID)" json:"createGrouping"`
@@ -55,4 +57,23 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 		fd.Mutations = append(fd.Mutations, od)
 	}
 	return tmpl.Execute(out, fd)
+}
+
+func fieldDefinitionFor(f *ast.FieldDefinition) string {
+	b := new(bytes.Buffer)
+	io.WriteString(b, f.Name)
+	io.WriteString(b, "(")
+	for i, each := range f.Arguments {
+		if i > 0 {
+			io.WriteString(b, ",")
+		}
+		io.WriteString(b, each.Name)
+		io.WriteString(b, ":")
+		io.WriteString(b, each.Type.String())
+	}
+	io.WriteString(b, ")")
+	io.WriteString(b, ":")
+	io.WriteString(b, f.Type.String())
+	return b.String()
+
 }

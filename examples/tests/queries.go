@@ -93,3 +93,49 @@ func (_q ListOpQuery) Build(
 	}
 	return buildRequest("query", operationName, _q.Data, _typedVars)
 }
+
+// PlusOpQuery is used for both specifying the query and capturing the response.
+type PlusOpQuery struct {
+	Errors Errors          `json:"errors"`
+	Data   PlusOpQueryData `graphql:"query"`
+}
+
+type PlusOpQueryData struct {
+	int32 `graphql:"plusOp(a: $a,b: $b)" json:"plusOp"`
+}
+
+// Build returns a GraphQLRequest with all the parts to send the HTTP request.
+func (_q PlusOpQuery) Build(
+	operationName string, // cannot be emtpy
+	_a int32,
+	_b int32,
+) GraphQLRequest {
+	_typedVars := map[string]valueAndType{
+		"a": {value: _a, graphType: "Int!"},
+		"b": {value: _b, graphType: "Int!"},
+	}
+	return buildRequest("query", operationName, _q.Data, _typedVars)
+}
+
+// PlusArrayOpQuery is used for both specifying the query and capturing the response.
+type PlusArrayOpQuery struct {
+	Errors Errors                 `json:"errors"`
+	Data   []PlusArrayOpQueryData `graphql:"query"`
+}
+
+type PlusArrayOpQueryData struct {
+	int32 `graphql:"plusArrayOp(as: $as,bs: $bs)" json:"plusArrayOp"`
+}
+
+// Build returns a GraphQLRequest with all the parts to send the HTTP request.
+func (_q PlusArrayOpQuery) Build(
+	operationName string, // cannot be emtpy
+	_as []int32,
+	_bs []int32,
+) GraphQLRequest {
+	_typedVars := map[string]valueAndType{
+		"as": {value: _as, graphType: "[Int]!"},
+		"bs": {value: _bs, graphType: "[Int!]"},
+	}
+	return buildRequest("query", operationName, _q.Data, _typedVars)
+}

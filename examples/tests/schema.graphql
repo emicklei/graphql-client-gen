@@ -34,6 +34,9 @@ type Query {
     # limit = max results
     # prefix =
     ListOp(limit:Int, prefix:String!): [Result]
+
+    plusOp(a:Int!,b:Int!):Int
+    plusArrayOp(as:[Int]!,bs:[Int!]):[Int]
 }
 
 """ 
@@ -42,7 +45,29 @@ multiple lines
 """
 type Mutation {
     """
-    createResult(): Result
+    create a Result
     """
     createResult(input:ResultInput!): ID!
+
+
+# BEGIN copy from Query
+
+    # no argument operation
+    noArgOp : Int!
+
+    # one argument operation
+    oneArgOp(required : Boolean!): String
+    
+    # filter operation
+    filterOp(sort: String!): [Result]
+
+    # optional arguments
+    # limit = max results
+    # prefix =
+    ListOp(limit:Int, prefix:String!): [Result]
+
+    plusOp(a:Int!,b:Int!):Int
+    plusArrayOp(as:[Int]!,bs:[Int!]):[Int]    
+
+# END copy from Query    
 }

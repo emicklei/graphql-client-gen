@@ -11,10 +11,12 @@ var (
 	_ = time.Now
 )
 
-// CreateResultMutation is used for both specifying the query and capturing the response. createResult(): Result
+// CreateResultMutation defines:
+// create a Result
 type CreateResultMutation struct {
 	Errors Errors `json:"errors"`
 	Data   struct {
+		// createResult(input:ResultInput!):ID!
 		ID `graphql:"createResult(input: $input)" json:"createResult"`
 	} `graphql:"mutation"`
 }
@@ -27,4 +29,126 @@ func (_m CreateResultMutation) Build(
 		"input": {value: _input, graphType: "ResultInput!"},
 	}
 	return buildRequest("mutation", "createResult", _m.Data, _typedVars)
+}
+
+// NoArgOpMutation defines:
+//
+type NoArgOpMutation struct {
+	Errors Errors `json:"errors"`
+	Data   struct {
+		// noArgOp():Int!
+		Int `graphql:"noArgOp()" json:"noArgOp"`
+	} `graphql:"mutation"`
+}
+
+// Build returns a GraphQLRequest with all the parts to send the HTTP request.
+func (_m NoArgOpMutation) Build() GraphQLRequest {
+	_typedVars := map[string]valueAndType{}
+	return buildRequest("mutation", "noArgOp", _m.Data, _typedVars)
+}
+
+// OneArgOpMutation defines:
+//
+type OneArgOpMutation struct {
+	Errors Errors `json:"errors"`
+	Data   struct {
+		// oneArgOp(required:Boolean!):String
+		String `graphql:"oneArgOp(required: $required)" json:"oneArgOp"`
+	} `graphql:"mutation"`
+}
+
+// Build returns a GraphQLRequest with all the parts to send the HTTP request.
+func (_m OneArgOpMutation) Build(
+	_required bool,
+) GraphQLRequest {
+	_typedVars := map[string]valueAndType{
+		"required": {value: _required, graphType: "Boolean!"},
+	}
+	return buildRequest("mutation", "oneArgOp", _m.Data, _typedVars)
+}
+
+// FilterOpMutation defines:
+//
+type FilterOpMutation struct {
+	Errors Errors `json:"errors"`
+	Data   []struct {
+		// filterOp(sort:String!):[Result]
+		Result `graphql:"filterOp(sort: $sort)" json:"filterOp"`
+	} `graphql:"mutation"`
+}
+
+// Build returns a GraphQLRequest with all the parts to send the HTTP request.
+func (_m FilterOpMutation) Build(
+	_sort string,
+) GraphQLRequest {
+	_typedVars := map[string]valueAndType{
+		"sort": {value: _sort, graphType: "String!"},
+	}
+	return buildRequest("mutation", "filterOp", _m.Data, _typedVars)
+}
+
+// ListOpMutation defines:
+//
+type ListOpMutation struct {
+	Errors Errors `json:"errors"`
+	Data   []struct {
+		// ListOp(limit:Int,prefix:String!):[Result]
+		Result `graphql:"ListOp(limit: $limit,prefix: $prefix)" json:"ListOp"`
+	} `graphql:"mutation"`
+}
+
+// Build returns a GraphQLRequest with all the parts to send the HTTP request.
+func (_m ListOpMutation) Build(
+	_limit int32,
+	_prefix string,
+) GraphQLRequest {
+	_typedVars := map[string]valueAndType{
+		"limit":  {value: _limit, graphType: "Int"},
+		"prefix": {value: _prefix, graphType: "String!"},
+	}
+	return buildRequest("mutation", "ListOp", _m.Data, _typedVars)
+}
+
+// PlusOpMutation defines:
+//
+type PlusOpMutation struct {
+	Errors Errors `json:"errors"`
+	Data   struct {
+		// plusOp(a:Int!,b:Int!):Int
+		Int `graphql:"plusOp(a: $a,b: $b)" json:"plusOp"`
+	} `graphql:"mutation"`
+}
+
+// Build returns a GraphQLRequest with all the parts to send the HTTP request.
+func (_m PlusOpMutation) Build(
+	_a int32,
+	_b int32,
+) GraphQLRequest {
+	_typedVars := map[string]valueAndType{
+		"a": {value: _a, graphType: "Int!"},
+		"b": {value: _b, graphType: "Int!"},
+	}
+	return buildRequest("mutation", "plusOp", _m.Data, _typedVars)
+}
+
+// PlusArrayOpMutation defines:
+//
+type PlusArrayOpMutation struct {
+	Errors Errors `json:"errors"`
+	Data   []struct {
+		// plusArrayOp(as:[Int]!,bs:[Int!]):[Int]
+		Int `graphql:"plusArrayOp(as: $as,bs: $bs)" json:"plusArrayOp"`
+	} `graphql:"mutation"`
+}
+
+// Build returns a GraphQLRequest with all the parts to send the HTTP request.
+func (_m PlusArrayOpMutation) Build(
+	_as []int32,
+	_bs []int32,
+) GraphQLRequest {
+	_typedVars := map[string]valueAndType{
+		"as": {value: _as, graphType: "[Int]!"},
+		"bs": {value: _bs, graphType: "[Int!]"},
+	}
+	return buildRequest("mutation", "plusArrayOp", _m.Data, _typedVars)
 }

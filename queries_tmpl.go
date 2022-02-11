@@ -28,7 +28,7 @@ type {{.FunctionName}}QueryData struct {
 func (_q {{.FunctionName}}Query) Build(
 	operationName string, // cannot be emtpy
 	{{- range .Arguments}}
-	{{.Name}} {{.Type}}, 
+	{{.Name}} {{if .IsArray}}[]{{end}}{{.Type}}, 
 	{{- end }}
 ) GraphQLRequest {
 	_typedVars := map[string]valueAndType{

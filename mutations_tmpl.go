@@ -14,18 +14,20 @@ var (
 
 {{- range .Mutations}}
 
-// {{.FunctionName}}Mutation is used for both specifying the query and capturing the response. {{.Comment}}
+// {{.FunctionName}}Mutation defines: 
+// {{.Comment}}
 type {{.FunctionName}}Mutation struct {
 	Errors Errors {{.ErrorsTag}}
-	Data struct {
-		{{.ReturnType}} {{.ReturnFieldTag}}
+	Data {{if .IsArray}}[]{{end}}struct {
+		// {{.Definition}}
+		{{.ReturnFieldName}} {{.ReturnFieldTag}}
 	} {{.DataTag}}
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
 func (_m {{.FunctionName}}Mutation) Build(
 		{{- range .Arguments}}
-		{{.Name}} {{.Type}}, 
+		{{.Name}} {{if .IsArray}}[]{{end}}{{.Type}}, 
 		{{- end }}
 	) GraphQLRequest { 
 	_typedVars := map[string]valueAndType{
