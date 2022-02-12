@@ -9,6 +9,7 @@ interface Identified {
 type Result implements Identified {    
     # will map to CustomDate
     when: Date
+    explanation(language:String!,long:Boolean):String!
 }
 
 input ResultInput {
@@ -37,6 +38,8 @@ type Query {
 
     plusOp(a:Int!,b:Int!):Int
     plusArrayOp(as:[Int]!,bs:[Int!]):[Int]
+
+    allResults(before:Date):[Result]
 }
 
 """ 
