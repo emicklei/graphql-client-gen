@@ -40,7 +40,7 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 				Kind:    string(each.Kind),
 				Name:    each.Name,
 			}
-			for _, other := range each.Fields {
+			for _, other := range withInheritedFields(doc, each) {
 				// is direct field or query
 				if len(other.Arguments) > 0 {
 					functionType := each.Name + fieldName(other.Name) + "Function"
@@ -66,6 +66,16 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 		}
 	}
 	return tmpl.Execute(out, fd)
+}
+
+func withInheritedFields(schema *ast.SchemaDocument, typeDef *ast.Definition) ast.FieldList {
+	all := ast.FieldList{}
+	for _, each := range typeDef.Interfaces {
+		if idef := schema.Definitions.ForName(each); idef != nil {
+			all = append(all, idef.Fields...)
+		}
+	}
+	return append(all, typeDef.Fields...)
 }
 
 func composeFunctionSignature(other *ast.FieldDefinition) string {

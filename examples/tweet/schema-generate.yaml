@@ -1,4 +1,0 @@
-package: tweet
-schema: schema.gql
-bindings:
-  Date: CustomDate
