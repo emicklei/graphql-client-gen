@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"reflect"
+	"sort"
 	"strings"
 )
 
@@ -16,7 +17,13 @@ func buildRequest(mutationOrQuery string, operationName string, querySample inte
 	writeQuery(querySample, queryBody, 0, false, typedVars)
 	body := queryBody.String()
 	signature := new(bytes.Buffer)
-	for k, v := range typedVars {
+	keys := []string{}
+	for k := range typedVars {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, k := range keys {
+		v := typedVars[k]
 		if signature.Len() > 0 {
 			io.WriteString(signature, ",")
 		}

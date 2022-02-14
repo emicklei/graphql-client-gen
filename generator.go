@@ -101,6 +101,15 @@ func (g *Generator) Generate() error {
 			unions = append(unions, each)
 		}
 	}
+	inputs := []*ast.Definition{}
+	for _, each := range doc.Definitions {
+		if each.Kind == ast.InputObject {
+			inputs = append(inputs, each)
+		}
+	}
+	if err := g.handleInputs(doc, inputs); err != nil {
+		return err
+	}
 	if err := g.handleUnions(doc, unions); err != nil {
 		return err
 	}

@@ -3,10 +3,9 @@ package tests
 import (
 	"strings"
 	"testing"
-	"time"
 )
 
-func TestExplanatioQuery(t *testing.T) {
+func TestExplanationQuery(t *testing.T) {
 	q := AllResultsQuery{}
 	q.Data = []AllResultsQueryData{
 		{Result: Result{
@@ -15,7 +14,7 @@ func TestExplanatioQuery(t *testing.T) {
 			},
 		}},
 	}
-	before := CustomDate(time.Now())
+	before := CustomDate("1920-03-12")
 	r := q.Build("operation", before)
 	if got, want := tabless(r.Query), tabless(`query operation($before:Date,$language1:String!) {
 	allResults(before: $before) {

@@ -18,13 +18,8 @@ type Identified struct {
 
 // Result is a OBJECT.
 type Result struct {
+	// will map to CustomDate
 	When        *CustomDate                `graphql:"when" json:"when,omitempty"`
 	Explanation *ResultExplanationFunction `graphql:"explanation" json:"explanation,omitempty"`
 	ID          interface{}                `graphql:"id" json:"id,omitempty"`
-}
-
-// ResultInput is a INPUT_OBJECT.
-type ResultInput struct {
-	When   CustomDate `graphql:"when" json:"when,omitempty"`
-	Unused *string    `graphql:"unused" json:"unused,omitempty"`
 }

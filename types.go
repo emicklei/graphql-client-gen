@@ -34,7 +34,7 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 		if each.Kind == ast.Enum {
 			continue
 		}
-		if each.Kind == ast.Object || each.Kind == ast.InputObject || each.Kind == ast.Interface {
+		if each.Kind == ast.Object || each.Kind == ast.Interface {
 			td := TypeData{
 				Comment: formatComment(each.Description),
 				Kind:    string(each.Kind),

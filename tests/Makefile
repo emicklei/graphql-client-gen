@@ -6,6 +6,7 @@ gen:
 	rm -f queries.go
 	rm -f build.go
 	rm -f unions.go
+	rm -f inputs.go
 	cd ../cmd/gcg && go install && cd ../../tests && gcg
 	gofmt -w enums.go
 	gofmt -w mutations.go
@@ -15,4 +16,5 @@ gen:
 	gofmt -w build.go
 	gofmt -w functions.go
 	gofmt -w unions.go
+	gofmt -w inputs.go
 	go test

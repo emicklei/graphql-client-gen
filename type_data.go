@@ -10,6 +10,7 @@ type FileData struct {
 	Scalars         []ScalarData
 	Functions       []FunctionData
 	Unions          []UnionData
+	Inputs          []InputData
 	IncludeScalarID bool
 	SchemaVersion   string
 }
@@ -44,12 +45,14 @@ type TypeData struct {
 }
 
 type FieldData struct {
-	Comment  string
-	Name     string
-	Tag      string
-	Type     string
-	IsArray  bool
-	Optional bool
+	StructName string
+	Comment    string
+	Name       string
+	JSONName   string
+	Tag        string
+	Type       string
+	IsArray    bool
+	Optional   bool
 }
 
 type EnumData struct {
@@ -76,4 +79,10 @@ type UnionData struct {
 	Comment string
 	Name    string
 	Types   []string
+}
+
+type InputData struct {
+	Comment string
+	Name    string
+	Fields  []FieldData
 }

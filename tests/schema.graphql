@@ -7,13 +7,16 @@ interface Identified {
 }
 
 type Result implements Identified {    
-    # will map to CustomDate
+    """will map to CustomDate"""
     when: Date
     explanation(language:String!,long:Boolean):String!
 }
 
+"""comment for ResultInput"""
 input ResultInput {
+    """comment for when"""
     when: Date!    
+    """comment for unused"""
     unused: String @deprecated
 }
 
