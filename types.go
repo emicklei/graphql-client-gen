@@ -44,14 +44,16 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 				// is direct field or query
 				if len(other.Arguments) > 0 {
 					functionType := each.Name + fieldName(other.Name) + "Function"
-					fnc := Function{
-						Signature:  composeFunctionSignature(other),
-						Type:       functionType,
-						Arguments:  other.Arguments,
-						IsArray:    isArray(other.Type),
-						ReturnType: g.mapScalar(other.Type.Name()),
+					if !g.hasFunctionDefinition(functionType) {
+						fnc := Function{
+							Signature:  composeFunctionSignature(other),
+							Type:       functionType,
+							Arguments:  other.Arguments,
+							IsArray:    isArray(other.Type),
+							ReturnType: g.mapScalar(other.Type.Name()),
+						}
+						g.functions = append(g.functions, fnc)
 					}
-					g.functions = append(g.functions, fnc)
 					td.Fields = append(td.Fields, FieldData{
 						Comment: formatComment(other.Description),
 						Name:    fieldName(other.Name),
@@ -69,13 +71,25 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 }
 
 func withInheritedFields(schema *ast.SchemaDocument, typeDef *ast.Definition) ast.FieldList {
-	all := ast.FieldList{}
+	all := append(ast.FieldList{}, typeDef.Fields...)
 	for _, each := range typeDef.Interfaces {
 		if idef := schema.Definitions.ForName(each); idef != nil {
-			all = append(all, idef.Fields...)
+			// prevent duplicate field
+			for _, other := range idef.Fields {
+				include := true
+				for _, included := range all {
+					if included.Name == other.Name {
+						include = false
+						break
+					}
+				}
+				if include {
+					all = append(all, other)
+				}
+			}
 		}
 	}
-	return append(all, typeDef.Fields...)
+	return all
 }
 
 func composeFunctionSignature(other *ast.FieldDefinition) string {

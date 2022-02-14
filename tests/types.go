@@ -18,9 +18,9 @@ type Identified struct {
 
 // Result is a OBJECT.
 type Result struct {
-	ID          interface{}                `graphql:"id" json:"id,omitempty"`
 	When        *CustomDate                `graphql:"when" json:"when,omitempty"`
 	Explanation *ResultExplanationFunction `graphql:"explanation" json:"explanation,omitempty"`
+	ID          interface{}                `graphql:"id" json:"id,omitempty"`
 }
 
 // ResultInput is a INPUT_OBJECT.

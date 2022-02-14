@@ -172,3 +172,12 @@ func goArgName(name string) string {
 	// check for reserved Go names to prevent syntax errors
 	return "_" + name
 }
+
+func (g *Generator) hasFunctionDefinition(typeName string) bool {
+	for _, each := range g.functions {
+		if each.Type == typeName {
+			return true
+		}
+	}
+	return false
+}
