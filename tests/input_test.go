@@ -6,7 +6,7 @@ import (
 )
 
 func TestResultInput(t *testing.T) {
-	i := NewResultInput()
+	i := ResultInput{}
 	i.Unused(nil)
 	i.When(CustomDate("2022-12-09"))
 	data, err := json.Marshal(i)

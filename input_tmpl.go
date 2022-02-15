@@ -16,25 +16,19 @@ var (
 {{- range .Inputs}}
 
 // {{.Name}} is an INPUT_OBJECT. {{.Comment}}
-type {{.Name}} struct {
-	values map[string]interface{}
-}
-
-// New{{.Name}} must be used to create a {{.Name}}.
-func New{{.Name}}() {{.Name}} {
-	return {{.Name}}{values: map[string]interface{}{}}	
-}
+type {{.Name}} map[string]interface{}
 
 {{- range .Fields}}
 {{- if gt (len .Comment) 0}}
 // {{.Comment}}{{- end}}
-func (i {{.StructName}}) {{.Name}}(v {{if .Optional}} *{{else}} {{end}}{{if .IsArray}}[]{{end}}{{.Type}}) {
-	i.values["{{.JSONName}}"] = v
+func (i {{.StructName}}) {{.Name}}(v {{if .Optional}} *{{else}} {{end}}{{if .IsArray}}[]{{end}}{{.Type}}) {{.StructName}} {
+	i["{{.JSONName}}"] = v
+	return i
 }
 {{- end}}
 
 func (i {{.Name}}) MarshalJSON() ([]byte, error) {
-	return json.Marshal(i.values)
+	return json.Marshal(map[string]interface{}(i))
 }
 
 {{- end}}

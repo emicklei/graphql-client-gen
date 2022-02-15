@@ -14,25 +14,20 @@ var (
 )
 
 // ResultInput is an INPUT_OBJECT. comment for ResultInput
-type ResultInput struct {
-	values map[string]interface{}
-}
-
-// NewResultInput must be used to create a ResultInput.
-func NewResultInput() ResultInput {
-	return ResultInput{values: map[string]interface{}{}}
-}
+type ResultInput map[string]interface{}
 
 // comment for when
-func (i ResultInput) When(v CustomDate) {
-	i.values["when"] = v
+func (i ResultInput) When(v CustomDate) ResultInput {
+	i["when"] = v
+	return i
 }
 
 // comment for unused
-func (i ResultInput) Unused(v *string) {
-	i.values["unused"] = v
+func (i ResultInput) Unused(v *string) ResultInput {
+	i["unused"] = v
+	return i
 }
 
 func (i ResultInput) MarshalJSON() ([]byte, error) {
-	return json.Marshal(i.values)
+	return json.Marshal(map[string]interface{}(i))
 }
