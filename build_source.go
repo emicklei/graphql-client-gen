@@ -114,7 +114,7 @@ func writeStruct(structValue interface{}, w io.Writer, indent int, inline bool, 
 		io.WriteString(w, ")")
 	}
 	// do not write empty nested structure if no fields are requested
-	if isZeroStruct(reflect.ValueOf(structValue)) {
+	if isZeroGraphQLStruct(reflect.ValueOf(structValue)) {
 		io.WriteString(w, "\n")
 		return
 	}
@@ -124,13 +124,19 @@ func writeStruct(structValue interface{}, w io.Writer, indent int, inline bool, 
 	io.WriteString(w, "}\n")
 }
 
-func isZeroStruct(v reflect.Value) bool {
+func isZeroGraphQLStruct(v reflect.Value) bool {
 	rt := v.Type()
-	for i := 0; i < v.NumField(); i++ { // ignore arguments
-		if _, ok := rt.Field(i).Tag.Lookup("graphql-function-arg"); !ok {
-			if !v.Field(i).IsZero() {
-				return false
-			}
+	for i := 0; i < v.NumField(); i++ {
+		f := rt.Field(i)
+		if len(f.Tag) == 0 { // no tag at all
+			continue
+		}
+		_, ok := f.Tag.Lookup("graphql-function-arg") // ignore arguments
+		if ok {
+			continue
+		}
+		if !v.Field(i).IsZero() {
+			return false
 		}
 	}
 	return true
