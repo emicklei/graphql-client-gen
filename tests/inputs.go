@@ -14,6 +14,8 @@ var (
 )
 
 // ResultInput is an INPUT_OBJECT. comment for ResultInput
+// 	when:Date!
+// 	unused:String @deprecated
 type ResultInput map[string]interface{}
 
 // comment for when
