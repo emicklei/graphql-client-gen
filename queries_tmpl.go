@@ -18,7 +18,7 @@ const SchemaVersion = "{{.SchemaVersion}}"
 
 // {{.FunctionName}}Query is used for both specifying the query and capturing the response. {{.Comment}}
 type {{.FunctionName}}Query struct {
-	Errors Errors {{.ErrorsTag}}
+	Errors []Error {{.ErrorsTag}}
 	Data      {{if .IsArray}}[]{{end}}{{.FunctionName}}QueryData {{.DataTag}}
 }
 

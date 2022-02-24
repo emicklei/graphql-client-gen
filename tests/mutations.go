@@ -14,7 +14,7 @@ var (
 // CreateResultMutation defines:
 // create a Result
 type CreateResultMutation struct {
-	Errors Errors `json:"errors"`
+	Errors []Error `json:"errors"`
 	Data   struct {
 		// createResult(input:ResultInput!):ID!
 		ID `graphql:"createResult(input: $input)" json:"createResult"`
@@ -34,7 +34,7 @@ func (_m CreateResultMutation) Build(
 // NoArgOpMutation defines:
 //
 type NoArgOpMutation struct {
-	Errors Errors `json:"errors"`
+	Errors []Error `json:"errors"`
 	Data   struct {
 		// noArgOp():Int!
 		Int `graphql:"noArgOp()" json:"noArgOp"`
@@ -50,7 +50,7 @@ func (_m NoArgOpMutation) Build() GraphQLRequest {
 // OneArgOpMutation defines:
 //
 type OneArgOpMutation struct {
-	Errors Errors `json:"errors"`
+	Errors []Error `json:"errors"`
 	Data   struct {
 		// oneArgOp(required:Boolean!):String
 		String `graphql:"oneArgOp(required: $required)" json:"oneArgOp"`
@@ -70,7 +70,7 @@ func (_m OneArgOpMutation) Build(
 // FilterOpMutation defines:
 //
 type FilterOpMutation struct {
-	Errors Errors `json:"errors"`
+	Errors []Error `json:"errors"`
 	Data   []struct {
 		// filterOp(sort:String!):[Result]
 		Result `graphql:"filterOp(sort: $sort)" json:"filterOp"`
@@ -90,7 +90,7 @@ func (_m FilterOpMutation) Build(
 // ListOpMutation defines:
 //
 type ListOpMutation struct {
-	Errors Errors `json:"errors"`
+	Errors []Error `json:"errors"`
 	Data   []struct {
 		// ListOp(limit:Int,prefix:String!):[Result]
 		Result `graphql:"ListOp(limit: $limit,prefix: $prefix)" json:"ListOp"`
@@ -112,7 +112,7 @@ func (_m ListOpMutation) Build(
 // PlusOpMutation defines:
 //
 type PlusOpMutation struct {
-	Errors Errors `json:"errors"`
+	Errors []Error `json:"errors"`
 	Data   struct {
 		// plusOp(a:Int!,b:Int!):Int
 		Int `graphql:"plusOp(a: $a,b: $b)" json:"plusOp"`
@@ -134,7 +134,7 @@ func (_m PlusOpMutation) Build(
 // PlusArrayOpMutation defines:
 //
 type PlusArrayOpMutation struct {
-	Errors Errors `json:"errors"`
+	Errors []Error `json:"errors"`
 	Data   []struct {
 		// plusArrayOp(as:[Int]!,bs:[Int!]):[Int]
 		Int `graphql:"plusArrayOp(as: $as,bs: $bs)" json:"plusArrayOp"`

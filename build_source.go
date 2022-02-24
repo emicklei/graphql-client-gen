@@ -182,8 +182,8 @@ func NewGraphQLRequest(query, operation string, vars ...map[string]interface{}) 
 	return GraphQLRequest{Query: query, OperationName: operation, Variables: initVars}
 }
 
-// Errors is a response field to capture server reported problems
-type Errors struct {
+// Error is a response field element to capture server reported problems
+type Error struct {
 	Message   string `json:"message,omitempty"`
 	Locations []struct {
 		Line   int `json:"line"`

@@ -15,7 +15,7 @@ const SchemaVersion = "v1.0.0"
 
 // NoArgOpQuery is used for both specifying the query and capturing the response.
 type NoArgOpQuery struct {
-	Errors Errors           `json:"errors"`
+	Errors []Error          `json:"errors"`
 	Data   NoArgOpQueryData `graphql:"query"`
 }
 
@@ -33,7 +33,7 @@ func (_q NoArgOpQuery) Build(
 
 // OneArgOpQuery is used for both specifying the query and capturing the response.
 type OneArgOpQuery struct {
-	Errors Errors            `json:"errors"`
+	Errors []Error           `json:"errors"`
 	Data   OneArgOpQueryData `graphql:"query"`
 }
 
@@ -54,7 +54,7 @@ func (_q OneArgOpQuery) Build(
 
 // FilterOpQuery is used for both specifying the query and capturing the response.
 type FilterOpQuery struct {
-	Errors Errors              `json:"errors"`
+	Errors []Error             `json:"errors"`
 	Data   []FilterOpQueryData `graphql:"query"`
 }
 
@@ -75,7 +75,7 @@ func (_q FilterOpQuery) Build(
 
 // ListOpQuery is used for both specifying the query and capturing the response.
 type ListOpQuery struct {
-	Errors Errors            `json:"errors"`
+	Errors []Error           `json:"errors"`
 	Data   []ListOpQueryData `graphql:"query"`
 }
 
@@ -98,7 +98,7 @@ func (_q ListOpQuery) Build(
 
 // PlusOpQuery is used for both specifying the query and capturing the response.
 type PlusOpQuery struct {
-	Errors Errors          `json:"errors"`
+	Errors []Error         `json:"errors"`
 	Data   PlusOpQueryData `graphql:"query"`
 }
 
@@ -121,7 +121,7 @@ func (_q PlusOpQuery) Build(
 
 // PlusArrayOpQuery is used for both specifying the query and capturing the response.
 type PlusArrayOpQuery struct {
-	Errors Errors                 `json:"errors"`
+	Errors []Error                `json:"errors"`
 	Data   []PlusArrayOpQueryData `graphql:"query"`
 }
 
@@ -144,7 +144,7 @@ func (_q PlusArrayOpQuery) Build(
 
 // AllResultsQuery is used for both specifying the query and capturing the response.
 type AllResultsQuery struct {
-	Errors Errors                `json:"errors"`
+	Errors []Error               `json:"errors"`
 	Data   []AllResultsQueryData `graphql:"query"`
 }
 

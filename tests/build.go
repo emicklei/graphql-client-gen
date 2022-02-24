@@ -129,12 +129,12 @@ func writeStruct(structValue interface{}, w io.Writer, indent int, inline bool, 
 
 func isZeroGraphQLStruct(v reflect.Value) bool {
 	rt := v.Type()
-	for i := 0; i < v.NumField(); i++ { // ignore arguments
+	for i := 0; i < v.NumField(); i++ {
 		f := rt.Field(i)
 		if len(f.Tag) == 0 { // no tag at all
 			continue
 		}
-		_, ok := f.Tag.Lookup("graphql-function-arg")
+		_, ok := f.Tag.Lookup("graphql-function-arg") // ignore arguments
 		if ok {
 			continue
 		}
@@ -185,8 +185,8 @@ func NewGraphQLRequest(query, operation string, vars ...map[string]interface{}) 
 	return GraphQLRequest{Query: query, OperationName: operation, Variables: initVars}
 }
 
-// Errors is a response field to capture server reported problems
-type Errors struct {
+// Error is a response field element to capture server reported problems
+type Error struct {
 	Message   string `json:"message,omitempty"`
 	Locations []struct {
 		Line   int `json:"line"`

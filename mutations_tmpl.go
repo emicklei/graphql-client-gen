@@ -17,7 +17,7 @@ var (
 // {{.FunctionName}}Mutation defines: 
 // {{.Comment}}
 type {{.FunctionName}}Mutation struct {
-	Errors Errors {{.ErrorsTag}}
+	Errors []Error {{.ErrorsTag}}
 	Data {{if .IsArray}}[]{{end}}struct {
 		// {{.Definition}}
 		{{.ReturnFieldName}} {{.ReturnFieldTag}}
