@@ -35,9 +35,15 @@ func (g *Generator) handleInputs(doc *ast.SchemaDocument, all []*ast.Definition)
 				IsArray:    isArray(other.Type),
 				Optional:   !other.Type.NonNull,
 				Type:       g.mapScalar(other.Type.Name()),
+				GraphType:  other.Type.String(),
+				Deprecated: isDeprecatedField(other),
 			})
 		}
 		fd.Inputs = append(fd.Inputs, id)
 	}
 	return tmpl.Execute(out, fd)
+}
+
+func isDeprecatedField(def *ast.FieldDefinition) bool {
+	return def.Directives.ForName("deprecated") != nil
 }

@@ -17,12 +17,14 @@ var (
 type ResultInput map[string]interface{}
 
 // comment for when
+// when:Date!
 func (i ResultInput) When(v CustomDate) ResultInput {
 	i["when"] = v
 	return i
 }
 
 // comment for unused
+// unused:String @deprecated
 func (i ResultInput) Unused(v *string) ResultInput {
 	i["unused"] = v
 	return i

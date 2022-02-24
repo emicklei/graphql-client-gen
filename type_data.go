@@ -51,8 +51,10 @@ type FieldData struct {
 	JSONName   string
 	Tag        string
 	Type       string
+	GraphType  string
 	IsArray    bool
 	Optional   bool
+	Deprecated bool
 }
 
 type EnumData struct {

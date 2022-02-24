@@ -21,6 +21,7 @@ type {{.Name}} map[string]interface{}
 {{- range .Fields}}
 {{- if gt (len .Comment) 0}}
 // {{.Comment}}{{- end}}
+// {{.JSONName}}:{{.GraphType}} {{if .Deprecated}}@deprecated{{end}}
 func (i {{.StructName}}) {{.Name}}(v {{if .Optional}} *{{else}} {{end}}{{if .IsArray}}[]{{end}}{{.Type}}) {{.StructName}} {
 	i["{{.JSONName}}"] = v
 	return i
