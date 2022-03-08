@@ -130,10 +130,8 @@ Then the generator will initialize a constant in queries.go such as:
 	const SchemaVersion = "v1.0.0"
 
 ### todo
- 
-- make optional arguments for function
-- __typename meta field
-- inputs with null values
+  
+- __typename meta field 
 
 ## limitations
 
