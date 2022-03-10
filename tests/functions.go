@@ -15,13 +15,13 @@ var (
 
 //
 // explanation(language:String!,long:Boolean):String!
-type ResultExplanationFunction struct {
+type ResultExplanationField struct {
 	Language string `graphql-function-arg:"language" graphql-function-type:"String!"`
 	Long     *bool  `graphql-function-arg:"long" graphql-function-type:"Boolean"`
 	// Result captures the query response part of this function.
 	Result string `graphql:"inline"`
 }
 
-func (f *ResultExplanationFunction) UnmarshalJSON(data []byte) error {
+func (f *ResultExplanationField) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &f.Result)
 }

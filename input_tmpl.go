@@ -17,7 +17,7 @@ var (
 
 // {{.Name}} is an INPUT_OBJECT. {{.Comment}}
 {{- range .Fields}}
-// 	{{.JSONName}}:{{.GraphType}} {{if .Deprecated}}@deprecated{{end}}
+// {{.JSONName}}:{{.GraphType}} {{if .Deprecated}}@deprecated{{end}}
 {{- end}}
 type {{.Name}} map[string]interface{}
 

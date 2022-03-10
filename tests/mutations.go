@@ -11,12 +11,11 @@ var (
 	_ = time.Now
 )
 
-// CreateResultMutation defines:
+// CreateResultMutation calls createResult(input:ResultInput!):ID!
 // create a Result
 type CreateResultMutation struct {
 	Errors []Error `json:"errors"`
 	Data   struct {
-		// createResult(input:ResultInput!):ID!
 		ID `graphql:"createResult(input: $input)" json:"createResult"`
 	} `graphql:"mutation"`
 }
@@ -31,12 +30,11 @@ func (_m CreateResultMutation) Build(
 	return buildRequest("mutation", "createResult", _m.Data, _typedVars)
 }
 
-// NoArgOpMutation defines:
+// NoArgOpMutation calls noArgOp():Int!
 //
 type NoArgOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   struct {
-		// noArgOp():Int!
 		Int `graphql:"noArgOp()" json:"noArgOp"`
 	} `graphql:"mutation"`
 }
@@ -47,12 +45,11 @@ func (_m NoArgOpMutation) Build() GraphQLRequest {
 	return buildRequest("mutation", "noArgOp", _m.Data, _typedVars)
 }
 
-// OneArgOpMutation defines:
+// OneArgOpMutation calls oneArgOp(required:Boolean!):String
 //
 type OneArgOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   struct {
-		// oneArgOp(required:Boolean!):String
 		String `graphql:"oneArgOp(required: $required)" json:"oneArgOp"`
 	} `graphql:"mutation"`
 }
@@ -67,12 +64,11 @@ func (_m OneArgOpMutation) Build(
 	return buildRequest("mutation", "oneArgOp", _m.Data, _typedVars)
 }
 
-// FilterOpMutation defines:
+// FilterOpMutation calls filterOp(sort:String!):[Result]
 //
 type FilterOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   []struct {
-		// filterOp(sort:String!):[Result]
 		Result `graphql:"filterOp(sort: $sort)" json:"filterOp"`
 	} `graphql:"mutation"`
 }
@@ -87,12 +83,11 @@ func (_m FilterOpMutation) Build(
 	return buildRequest("mutation", "filterOp", _m.Data, _typedVars)
 }
 
-// ListOpMutation defines:
+// ListOpMutation calls ListOp(limit:Int,prefix:String!):[Result]
 //
 type ListOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   []struct {
-		// ListOp(limit:Int,prefix:String!):[Result]
 		Result `graphql:"ListOp(limit: $limit,prefix: $prefix)" json:"ListOp"`
 	} `graphql:"mutation"`
 }
@@ -109,12 +104,11 @@ func (_m ListOpMutation) Build(
 	return buildRequest("mutation", "ListOp", _m.Data, _typedVars)
 }
 
-// PlusOpMutation defines:
+// PlusOpMutation calls plusOp(a:Int!,b:Int!):Int
 //
 type PlusOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   struct {
-		// plusOp(a:Int!,b:Int!):Int
 		Int `graphql:"plusOp(a: $a,b: $b)" json:"plusOp"`
 	} `graphql:"mutation"`
 }
@@ -131,12 +125,11 @@ func (_m PlusOpMutation) Build(
 	return buildRequest("mutation", "plusOp", _m.Data, _typedVars)
 }
 
-// PlusArrayOpMutation defines:
+// PlusArrayOpMutation calls plusArrayOp(as:[Int]!,bs:[Int!]):[Int]
 //
 type PlusArrayOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   []struct {
-		// plusArrayOp(as:[Int]!,bs:[Int!]):[Int]
 		Int `graphql:"plusArrayOp(as: $as,bs: $bs)" json:"plusArrayOp"`
 	} `graphql:"mutation"`
 }

@@ -19,7 +19,9 @@ type Identified struct {
 // Result is a OBJECT.
 type Result struct {
 	// will map to CustomDate
-	When        *CustomDate                `graphql:"when" json:"when,omitempty"`
-	Explanation *ResultExplanationFunction `graphql:"explanation" json:"explanation,omitempty"`
-	ID          interface{}                `graphql:"id" json:"id,omitempty"`
+	When        *CustomDate             `graphql:"when" json:"when,omitempty"`
+	Explanation *ResultExplanationField `graphql:"explanation" json:"explanation,omitempty"`
+	ID          interface{}             `graphql:"id" json:"id,omitempty"`
+	// GraphQLTypename is a metadata field
+	GraphQLTypename string `json:"__typename,omitempty"`
 }

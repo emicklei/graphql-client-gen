@@ -14,12 +14,11 @@ var (
 
 {{- range .Mutations}}
 
-// {{.FunctionName}}Mutation defines: 
+// {{.FunctionName}}Mutation calls {{.Definition}}
 // {{.Comment}}
 type {{.FunctionName}}Mutation struct {
 	Errors []Error {{.ErrorsTag}}
-	Data {{if .IsArray}}[]{{end}}struct {
-		// {{.Definition}}
+	Data {{if .IsArray}}[]{{end}}struct {		
 		{{.ReturnFieldName}} {{.ReturnFieldTag}}
 	} {{.DataTag}}
 }

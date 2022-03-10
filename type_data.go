@@ -38,10 +38,11 @@ type OperationData struct {
 }
 
 type TypeData struct {
-	Comment string
-	Kind    string
-	Name    string
-	Fields  []FieldData
+	Comment     string
+	Kind        string
+	Name        string
+	Fields      []FieldData
+	TypenameTag string
 }
 
 type FieldData struct {

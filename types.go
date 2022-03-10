@@ -40,10 +40,13 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 				Kind:    string(each.Kind),
 				Name:    each.Name,
 			}
+			if each.Kind != ast.Interface {
+				td.TypenameTag = "`json:\"__typename,omitempty\"`"
+			}
 			for _, other := range withInheritedFields(doc, each) {
 				// is direct field or query
 				if len(other.Arguments) > 0 {
-					functionType := each.Name + fieldName(other.Name) + "Function"
+					functionType := each.Name + fieldName(other.Name) + "Field"
 					if !g.hasFunctionDefinition(functionType) {
 						fnc := Function{
 							Signature:  composeFunctionSignature(other),

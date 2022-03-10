@@ -9,7 +9,7 @@ func TestExplanationQuery(t *testing.T) {
 	q := AllResultsQuery{}
 	q.Data = []AllResultsQueryData{
 		{Result: Result{
-			Explanation: &ResultExplanationFunction{
+			Explanation: &ResultExplanationField{
 				Language: "en_us",
 			},
 		}},

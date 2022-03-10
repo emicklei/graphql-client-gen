@@ -20,6 +20,9 @@ type {{.Name}} struct {
 	// {{.Comment}}{{- end}}
 	{{.Name}} {{if .Optional}} *{{else}} {{end}}{{if .IsArray}}[]{{end}}{{.Type}} {{.Tag}}
 	{{- end}}
+	{{- if gt (len .TypenameTag) 0}}
+	// GraphQLTypename is a metadata field
+	GraphQLTypename string {{.TypenameTag}}{{- end}}
 }
 {{- end}}
 `
