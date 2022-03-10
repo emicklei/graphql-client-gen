@@ -41,7 +41,7 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 				Name:    each.Name,
 			}
 			if each.Kind != ast.Interface {
-				td.TypenameTag = "`json:\"__typename,omitempty\"`"
+				td.TypenameTag = "`graphql:\"__typename\" json:\"__typename,omitempty\"`"
 			}
 			for _, other := range withInheritedFields(doc, each) {
 				// is direct field or query

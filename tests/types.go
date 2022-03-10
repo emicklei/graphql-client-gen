@@ -23,5 +23,5 @@ type Result struct {
 	Explanation *ResultExplanationField `graphql:"explanation" json:"explanation,omitempty"`
 	ID          interface{}             `graphql:"id" json:"id,omitempty"`
 	// GraphQLTypename is a metadata field
-	GraphQLTypename string `json:"__typename,omitempty"`
+	GraphQLTypename string `graphql:"__typename" json:"__typename,omitempty"`
 }
