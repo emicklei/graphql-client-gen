@@ -1,4 +1,9 @@
+![Travis (.com)](https://img.shields.io/travis/com/emicklei/graphql-client-gen)
+![GitHub](https://img.shields.io/github/license/emicklei/graphql-client-gen)
+![OSS Lifecycle](https://img.shields.io/osslifecycle/emicklei/graphql-client-gen)
+
 # gcg - graphql client generator
+
 
 This tool takes a GraphQL schema in SDL and generates Go sources for all entities (enums, mutations, types, queries, unions, functions).
 
@@ -7,10 +12,6 @@ Queries and mutations are composed by setting field values in your (nested) stru
 If you need more complex queries than can not be expressed using the types then you can choose to use the types only for capturing the response.
 
 Generated sources have no dependencies outside the standard Go SDK.
-
-## status
-
-work in progress
 
 ## prepare
 
@@ -128,10 +129,6 @@ The following example shows how to define this
 Then the generator will initialize a constant in queries.go such as:
 
 	const SchemaVersion = "v1.0.0"
-
-### todo
-  
-- __typename meta field 
 
 ## limitations
 
