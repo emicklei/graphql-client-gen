@@ -31,7 +31,6 @@ func (_m CreateResultMutation) Build(
 }
 
 // NoArgOpMutation calls noArgOp():Int!
-//
 type NoArgOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   struct {
@@ -46,7 +45,6 @@ func (_m NoArgOpMutation) Build() GraphQLRequest {
 }
 
 // OneArgOpMutation calls oneArgOp(required:Boolean!):String
-//
 type OneArgOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   struct {
@@ -65,7 +63,6 @@ func (_m OneArgOpMutation) Build(
 }
 
 // FilterOpMutation calls filterOp(sort:String!):[Result]
-//
 type FilterOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   []struct {
@@ -84,7 +81,6 @@ func (_m FilterOpMutation) Build(
 }
 
 // ListOpMutation calls ListOp(limit:Int,prefix:String!):[Result]
-//
 type ListOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   []struct {
@@ -105,7 +101,6 @@ func (_m ListOpMutation) Build(
 }
 
 // PlusOpMutation calls plusOp(a:Int!,b:Int!):Int
-//
 type PlusOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   struct {
@@ -126,7 +121,6 @@ func (_m PlusOpMutation) Build(
 }
 
 // PlusArrayOpMutation calls plusArrayOp(as:[Int]!,bs:[Int!]):[Int]
-//
 type PlusArrayOpMutation struct {
 	Errors []Error `json:"errors"`
 	Data   []struct {

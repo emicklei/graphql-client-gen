@@ -54,9 +54,10 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool, vars map[st
 		}
 		return
 	}
+	isDataRoot := indent == 0
 	for i := 0; i < rt.NumField(); i++ {
 		fv := rv.Field(i)
-		if fv.IsZero() {
+		if fv.IsZero() && !isDataRoot {
 			continue
 		}
 		sf := rt.Field(i)
@@ -116,8 +117,10 @@ func writeStruct(structValue interface{}, w io.Writer, indent int, inline bool, 
 		}
 		io.WriteString(w, ")")
 	}
+	isDataRoot := indent == 0
 	// do not write empty nested structure if no fields are requested
-	if isZeroGraphQLStruct(reflect.ValueOf(structValue)) {
+	// unless data root which describes the query | mutation
+	if isZeroGraphQLStruct(reflect.ValueOf(structValue)) && !isDataRoot {
 		io.WriteString(w, "\n")
 		return
 	}

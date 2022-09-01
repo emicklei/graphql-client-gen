@@ -13,7 +13,6 @@ var (
 	_ = json.Unmarshal
 )
 
-//
 // explanation(language:String!,long:Boolean):String!
 type ResultExplanationField struct {
 	Language string `graphql-function-arg:"language" graphql-function-type:"String!"`
