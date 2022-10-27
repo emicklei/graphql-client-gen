@@ -31,6 +31,10 @@ func buildRequest(mutationOrQuery string, operationName string, querySample inte
 	}
 	vars := map[string]interface{}{}
 	for k, v := range typedVars {
+		// do not include zero-valued variables	
+		if reflect.ValueOf(v.value).IsZero() {
+			continue
+		}
 		vars[k] = v.value
 	}
 	return GraphQLRequest{
