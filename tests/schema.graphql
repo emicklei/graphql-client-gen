@@ -38,11 +38,17 @@ type Query {
     # limit = max results
     # prefix =
     ListOp(limit:Int, prefix:String!): [Result]
+    MatrixOp(limit:Int): [[MatrixCell]!]!
 
     plusOp(a:Int!,b:Int!):Int
     plusArrayOp(as:[Int]!,bs:[Int!]):[Int]
 
     allResults(before:Date):[Result]
+}
+
+
+type MatrixCell {
+    isEmptyCell: Boolean!
 }
 
 """ 

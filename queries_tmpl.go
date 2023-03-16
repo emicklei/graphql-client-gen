@@ -19,11 +19,11 @@ const SchemaVersion = "{{.SchemaVersion}}"
 // {{.FunctionName}}Query is used for both specifying the query and capturing the response. {{.Comment}}
 type {{.FunctionName}}Query struct {
 	Errors []Error {{.ErrorsTag}}
-	Data      {{if .IsArray}}[]{{end}}{{.FunctionName}}QueryData {{.DataTag}}
+	Data      {{if .IsArray}}{{.ArraySuffix}}{{end}}{{.FunctionName}}QueryData {{.DataTag}}
 }
 
 type {{.FunctionName}}QueryData struct {
-	{{.ReturnType}} {{.ReturnFieldTag}}
+	{{.ReturnType}} {{.EmbedFieldTag}}
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.

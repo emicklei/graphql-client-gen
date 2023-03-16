@@ -20,7 +20,7 @@ type NoArgOpQuery struct {
 }
 
 type NoArgOpQueryData struct {
-	int32 `graphql:"noArgOp" json:"noArgOp"`
+	int32 `graphql:"noArgOp" `
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -38,7 +38,7 @@ type OneArgOpQuery struct {
 }
 
 type OneArgOpQueryData struct {
-	string `graphql:"oneArgOp(required: $required)" json:"oneArgOp"`
+	string `graphql:"oneArgOp(required: $required)" `
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -59,7 +59,7 @@ type FilterOpQuery struct {
 }
 
 type FilterOpQueryData struct {
-	Result `graphql:"filterOp(sort: $sort)" json:"filterOp"`
+	Result `graphql:"filterOp(sort: $sort)" `
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -80,7 +80,7 @@ type ListOpQuery struct {
 }
 
 type ListOpQueryData struct {
-	Result `graphql:"ListOp(limit: $limit,prefix: $prefix)" json:"ListOp"`
+	Result `graphql:"ListOp(limit: $limit,prefix: $prefix)" `
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -96,6 +96,27 @@ func (_q ListOpQuery) Build(
 	return buildRequest("query", operationName, _q.Data, _typedVars)
 }
 
+// MatrixOpQuery is used for both specifying the query and capturing the response.
+type MatrixOpQuery struct {
+	Errors []Error               `json:"errors"`
+	Data   [][]MatrixOpQueryData `graphql:"query"`
+}
+
+type MatrixOpQueryData struct {
+	MatrixCell `graphql:"MatrixOp(limit: $limit)" `
+}
+
+// Build returns a GraphQLRequest with all the parts to send the HTTP request.
+func (_q MatrixOpQuery) Build(
+	operationName string, // cannot be emtpy
+	_limit int32,
+) GraphQLRequest {
+	_typedVars := map[string]valueAndType{
+		"limit": {value: _limit, graphType: "Int"},
+	}
+	return buildRequest("query", operationName, _q.Data, _typedVars)
+}
+
 // PlusOpQuery is used for both specifying the query and capturing the response.
 type PlusOpQuery struct {
 	Errors []Error         `json:"errors"`
@@ -103,7 +124,7 @@ type PlusOpQuery struct {
 }
 
 type PlusOpQueryData struct {
-	int32 `graphql:"plusOp(a: $a,b: $b)" json:"plusOp"`
+	int32 `graphql:"plusOp(a: $a,b: $b)" `
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -126,7 +147,7 @@ type PlusArrayOpQuery struct {
 }
 
 type PlusArrayOpQueryData struct {
-	int32 `graphql:"plusArrayOp(as: $as,bs: $bs)" json:"plusArrayOp"`
+	int32 `graphql:"plusArrayOp(as: $as,bs: $bs)" `
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.
@@ -149,7 +170,7 @@ type AllResultsQuery struct {
 }
 
 type AllResultsQueryData struct {
-	Result `graphql:"allResults(before: $before)" json:"allResults"`
+	Result `graphql:"allResults(before: $before)" `
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.

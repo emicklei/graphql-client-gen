@@ -25,3 +25,10 @@ type Result struct {
 	// GraphQLTypename is a metadata field
 	GraphQLTypename string `graphql:"__typename" json:"__typename,omitempty"`
 }
+
+// MatrixCell is a OBJECT.
+type MatrixCell struct {
+	IsEmptyCell bool `graphql:"isEmptyCell" json:"isEmptyCell,omitempty"`
+	// GraphQLTypename is a metadata field
+	GraphQLTypename string `graphql:"__typename" json:"__typename,omitempty"`
+}

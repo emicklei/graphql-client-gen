@@ -49,11 +49,12 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 					functionType := each.Name + fieldName(other.Name) + "Field"
 					if !g.hasFunctionDefinition(functionType) {
 						fnc := Function{
-							Signature:  composeFunctionSignature(other),
-							Type:       functionType,
-							Arguments:  other.Arguments,
-							IsArray:    isArray(other.Type),
-							ReturnType: g.mapScalar(other.Type.Name()),
+							Signature:   composeFunctionSignature(other),
+							Type:        functionType,
+							Arguments:   other.Arguments,
+							IsArray:     isArray(other.Type),
+							ArraySuffix: arraySuffix(other.Type),
+							ReturnType:  g.mapScalar(other.Type.Name()),
 						}
 						g.functions = append(g.functions, fnc)
 					}
@@ -117,11 +118,12 @@ func composeFunctionSignature(other *ast.FieldDefinition) string {
 
 func (g *Generator) buildFieldData(other *ast.FieldDefinition) FieldData {
 	return FieldData{
-		Comment:  formatComment(other.Description),
-		Optional: !other.Type.NonNull,
-		Name:     fieldName(other.Name),
-		Type:     g.mapScalar(other.Type.Name()),
-		IsArray:  isArray(other.Type),
-		Tag:      fmt.Sprintf("`graphql:\"%s\" json:\"%s,omitempty\"`", other.Name, other.Name),
+		Comment:     formatComment(other.Description),
+		Optional:    !other.Type.NonNull,
+		Name:        fieldName(other.Name),
+		Type:        g.mapScalar(other.Type.Name()),
+		IsArray:     isArray(other.Type),
+		ArraySuffix: arraySuffix(other.Type),
+		Tag:         fmt.Sprintf("`graphql:\"%s\" json:\"%s,omitempty\"`", other.Name, other.Name),
 	}
 }

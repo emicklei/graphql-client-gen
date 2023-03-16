@@ -31,6 +31,7 @@ func (g *Generator) handleQueries(def *ast.Definition) error {
 			FunctionName: strcase.ToCamel(each.Name),
 			ReturnType:   g.mapScalar(each.Type.Name()),
 			IsArray:      isArray(each.Type), // refers to the Data field
+			ArraySuffix:  arraySuffix(each.Type),
 			ErrorsTag:    "`json:\"errors\"`",
 		}
 		// build return field tag
@@ -45,14 +46,17 @@ func (g *Generator) handleQueries(def *ast.Definition) error {
 				}
 				fmt.Fprintf(tag, "%s: $%s", arg.Name, arg.Name)
 				op.Arguments = append(op.Arguments, Argument{
-					Name:      goArgName(arg.Name),
-					JSONName:  arg.Name,
-					Type:      g.mapScalar(arg.Type.Name()),
-					GraphType: arg.Type.String(),
-					IsArray:   isArray(arg.Type)})
+					Name:        goArgName(arg.Name),
+					JSONName:    arg.Name,
+					Type:        g.mapScalar(arg.Type.Name()),
+					GraphType:   arg.Type.String(),
+					IsArray:     isArray(arg.Type),
+					ArraySuffix: arraySuffix(arg.Type),
+				})
 			}
 			fmt.Fprintf(tag, ")")
 		}
+		op.EmbedFieldTag = tag.String() + "\" `"
 		fmt.Fprintf(tag, "\" json:\"%s\"`", each.Name)
 		op.ReturnFieldTag = tag.String()
 		op.DataTag = "`graphql:\"query\"`"

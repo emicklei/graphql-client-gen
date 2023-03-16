@@ -28,15 +28,16 @@ func (g *Generator) handleInputs(doc *ast.SchemaDocument, all []*ast.Definition)
 		}
 		for _, other := range each.Fields {
 			id.Fields = append(id.Fields, FieldData{
-				StructName: each.Name,
-				Comment:    formatComment(other.Description),
-				Name:       fieldName(other.Name),
-				JSONName:   other.Name,
-				IsArray:    isArray(other.Type),
-				Optional:   !other.Type.NonNull,
-				Type:       g.mapScalar(other.Type.Name()),
-				GraphType:  other.Type.String(),
-				Deprecated: isDeprecatedField(other),
+				StructName:  each.Name,
+				Comment:     formatComment(other.Description),
+				Name:        fieldName(other.Name),
+				JSONName:    other.Name,
+				IsArray:     isArray(other.Type),
+				ArraySuffix: arraySuffix(other.Type),
+				Optional:    !other.Type.NonNull,
+				Type:        g.mapScalar(other.Type.Name()),
+				GraphType:   other.Type.String(),
+				Deprecated:  isDeprecatedField(other),
 			})
 		}
 		fd.Inputs = append(fd.Inputs, id)

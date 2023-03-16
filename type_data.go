@@ -16,11 +16,12 @@ type FileData struct {
 }
 
 type Argument struct {
-	Name      string
-	JSONName  string
-	Type      string
-	GraphType string
-	IsArray   bool
+	Name        string
+	JSONName    string
+	Type        string
+	GraphType   string
+	IsArray     bool
+	ArraySuffix string
 }
 
 type OperationData struct {
@@ -31,8 +32,10 @@ type OperationData struct {
 	Arguments       []Argument
 	ReturnType      string
 	ReturnFieldName string
+	EmbedFieldTag   string
 	ReturnFieldTag  string
 	IsArray         bool
+	ArraySuffix     string
 	DataTag         string
 	ErrorsTag       string
 }
@@ -46,16 +49,17 @@ type TypeData struct {
 }
 
 type FieldData struct {
-	StructName string
-	Comment    string
-	Name       string
-	JSONName   string
-	Tag        string
-	Type       string
-	GraphType  string
-	IsArray    bool
-	Optional   bool
-	Deprecated bool
+	StructName  string
+	Comment     string
+	Name        string
+	JSONName    string
+	Tag         string
+	Type        string
+	GraphType   string
+	IsArray     bool
+	ArraySuffix string
+	Optional    bool
+	Deprecated  bool
 }
 
 type EnumData struct {
@@ -70,12 +74,13 @@ type ScalarData struct {
 }
 
 type FunctionData struct {
-	Comment    string
-	Name       string
-	Fields     []FieldData
-	IsArray    bool
-	ReturnType string
-	ResultTag  string
+	Comment     string
+	Name        string
+	Fields      []FieldData
+	IsArray     bool
+	ArraySuffix string
+	ReturnType  string
+	ResultTag   string
 }
 
 type UnionData struct {

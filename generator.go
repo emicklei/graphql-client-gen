@@ -165,6 +165,16 @@ func isArray(t *ast.Type) bool {
 	return t.NamedType == ""
 }
 
+func arraySuffix(t *ast.Type) string {
+	if !isArray(t) {
+		return ""
+	}
+	if t.Elem != nil && isArray(t.Elem) {
+		return "[][]"
+	}
+	return "[]"
+}
+
 func formatComment(comment string) string {
 	lines := strings.Split(comment, "\n")
 	if len(lines) <= 1 {

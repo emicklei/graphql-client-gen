@@ -14,6 +14,7 @@ type Function struct {
 	Description string
 	Arguments   ast.ArgumentDefinitionList
 	IsArray     bool
+	ArraySuffix string
 	ReturnType  string
 	Tag         string
 }
@@ -48,6 +49,7 @@ func (g *Generator) handleFunctions() error {
 				Name:     fieldName(other.Name),
 				Type:     g.mapScalar(other.Type.Name()),
 				IsArray:  isArray(other.Type),
+				ArraySuffix: arraySuffix(other.Type),
 				Tag:      fmt.Sprintf("`graphql-function-arg:\"%s\" graphql-function-type:\"%s\"`", other.Name, other.Type.String()),
 			})
 		}

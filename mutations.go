@@ -33,6 +33,7 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 			Name:            other.Name,
 			FunctionName:    strcase.ToCamel(other.Name),
 			IsArray:         isArray(other.Type),
+			ArraySuffix:     arraySuffix(other.Type),
 			ReturnFieldName: rt,
 			ErrorsTag:       "`json:\"errors\"`",
 		}
@@ -46,11 +47,14 @@ func (g *Generator) handleMutations(each *ast.Definition) error {
 			}
 			fmt.Fprintf(tag, "%s: $%s", arg.Name, arg.Name)
 			od.Arguments = append(od.Arguments, Argument{
-				Name:     goArgName(arg.Name),
-				JSONName: arg.Name,
-				Type:     g.mapScalar(arg.Type.Name()), IsArray: isArray(arg.Type),
-				GraphType: arg.Type.String()})
+				Name:        goArgName(arg.Name),
+				JSONName:    arg.Name,
+				Type:        g.mapScalar(arg.Type.Name()),
+				IsArray:     isArray(arg.Type),
+				ArraySuffix: arraySuffix(other.Type),
+				GraphType:   arg.Type.String()})
 		}
+		od.EmbedFieldTag = tag.String() + "\"`"
 		fmt.Fprintf(tag, ")\" json:\"%s\"`", other.Name)
 		od.ReturnFieldTag = tag.String()
 		od.DataTag = "`graphql:\"mutation\"`"
