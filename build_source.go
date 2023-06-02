@@ -67,7 +67,9 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool, vars map[st
 				k = k.Elem()
 				fv = fv.Elem()
 			}
-			if k.Kind() == reflect.Struct {
+			if k.Kind() == reflect.Slice && fv.Len() > 0 {
+				writeQuery(fv.Index(0).Interface(), w, indent, inline, vars)
+			} else if k.Kind() == reflect.Struct {
 				writeQuery(fv.Interface(), w, indent, inlineField, vars)
 			}
 		} else {
