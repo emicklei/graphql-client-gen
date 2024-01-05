@@ -61,7 +61,7 @@ func readConfig() *Config {
 func main() {
 	config := readConfig()
 
-	data, err := ioutil.ReadFile(config.SchemaFile)
+	data, err := os.ReadFile(config.SchemaFile)
 	if err != nil {
 		log.Fatalf("Cannot find schema file `%s`", config.SchemaFile)
 	}

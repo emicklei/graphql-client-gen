@@ -3,6 +3,7 @@ package gcg
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"text/template"
 
@@ -11,6 +12,7 @@ import (
 )
 
 func (g *Generator) handleQueries(def *ast.Definition) error {
+	log.Println("generating queries.go")
 	out, err := os.Create("queries.go")
 	if err != nil {
 		return err

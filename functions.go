@@ -2,6 +2,7 @@ package gcg
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"text/template"
 
@@ -19,6 +20,7 @@ type Function struct {
 }
 
 func (g *Generator) handleFunctions() error {
+	log.Println("generating functions.go")
 	out, err := os.Create("functions.go")
 	if err != nil {
 		return err

@@ -3,6 +3,7 @@ package gcg
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"runtime/debug"
 	"strings"
 
@@ -73,11 +74,15 @@ func (g *Generator) Generate() error {
 		if err := g.handleMutations(each); err != nil {
 			return err
 		}
+	} else {
+		log.Println("no definition for Mutation found, skipping mutations.go generation")
 	}
 	if each := doc.Definitions.ForName("Query"); each != nil {
 		if err := g.handleQueries(each); err != nil {
 			return err
 		}
+	} else {
+		log.Println("no definition for Query found, skipping queries.go generation")
 	}
 	enums := []*ast.Definition{}
 	for _, each := range doc.Definitions {
@@ -108,24 +113,31 @@ func (g *Generator) Generate() error {
 		}
 	}
 	if err := g.handleInputs(doc, inputs); err != nil {
+		log.Println("error handling inputs:", err)
 		return err
 	}
 	if err := g.handleUnions(doc, unions); err != nil {
+		log.Println("error handling unions:", err)
 		return err
 	}
 	if err := g.handleScalars(scalarDefs); err != nil {
+		log.Println("error handling scalars:", err)
 		return err
 	}
 	if err := g.handleEnums(enums); err != nil {
+		log.Println("error handling enums:", err)
 		return err
 	}
 	if err := g.handleTypes(doc); err != nil {
+		log.Println("error handling types:", err)
 		return err
 	}
 	if err := g.handleFunctions(); err != nil {
+		log.Println("error handling functions:", err)
 		return err
 	}
 	if err := g.handleBuildTools(); err != nil {
+		log.Println("error handling build tools:", err)
 		return err
 	}
 	return nil

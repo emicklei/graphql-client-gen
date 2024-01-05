@@ -1,6 +1,7 @@
 package gcg
 
 import (
+	"log"
 	"os"
 	"text/template"
 
@@ -8,6 +9,7 @@ import (
 )
 
 func (g *Generator) handleInputs(doc *ast.SchemaDocument, all []*ast.Definition) error {
+	log.Println("generating inputs.go")
 	out, err := os.Create("inputs.go")
 	if err != nil {
 		return err

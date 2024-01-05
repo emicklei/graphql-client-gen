@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"text/template"
 
@@ -12,6 +13,7 @@ import (
 )
 
 func (g *Generator) handleMutations(each *ast.Definition) error {
+	log.Println("generating mutations.go")
 	out, err := os.Create("mutations.go")
 	if err != nil {
 		return err
