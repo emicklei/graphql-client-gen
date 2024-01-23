@@ -3,7 +3,9 @@ package gcg
 import (
 	"fmt"
 	"io"
+	"log"
 	"os"
+	"path"
 	"strings"
 
 	_ "embed"
@@ -13,8 +15,8 @@ import (
 var buildSource string
 
 func (g *Generator) handleBuildTools() error {
-
-	out, err := os.Create("build.go")
+	log.Println("generating build.go")
+	out, err := os.Create(path.Join(g.targetDirectory, "build.go"))
 	if err != nil {
 		return err
 	}

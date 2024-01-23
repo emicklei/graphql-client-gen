@@ -6,6 +6,7 @@ import (
 	"log"
 	"runtime/debug"
 	"strings"
+	"unicode"
 
 	"github.com/iancoleman/strcase"
 	"github.com/vektah/gqlparser/ast"
@@ -18,17 +19,26 @@ type ScalarBinding struct {
 }
 
 type Generator struct {
-	sourceFilename string
-	schemaSource   string
-	packageName    string
-	functions      []Function
-	scalarBindings []ScalarBinding
-	mainVersion    string
-	schemaVersion  string
+	sourceFilename  string
+	schemaSource    string
+	packageName     string
+	functions       []Function
+	scalarBindings  []ScalarBinding
+	mainVersion     string
+	schemaVersion   string
+	targetDirectory string
+	queryType       string
+	mutationType    string
 }
 
 func NewGenerator(schemaSource string, options ...Option) *Generator {
-	g := &Generator{schemaSource: schemaSource, packageName: "generated"}
+	g := &Generator{
+		schemaSource:    schemaSource,
+		packageName:     "generated",
+		targetDirectory: ".",
+		queryType:       "Query",    // schema can say different, but this is the default
+		mutationType:    "Mutation", // schema can say different, but this is the default
+	}
 	// need version to put in generated files
 	bi, ok := debug.ReadBuildInfo()
 	if ok && len(bi.Main.Version) > 0 {
@@ -69,15 +79,25 @@ func (g *Generator) Generate() error {
 			}
 		}
 	}
-
-	if each := doc.Definitions.ForName("Mutation"); each != nil {
+	// find the name of the query type
+	for _, s := range doc.Schema {
+		for _, each := range s.OperationTypes {
+			if each.Operation == "query" {
+				g.queryType = each.Type
+			}
+			if each.Operation == "mutation" {
+				g.mutationType = each.Type
+			}
+		}
+	}
+	if each := doc.Definitions.ForName(g.mutationType); each != nil {
 		if err := g.handleMutations(each); err != nil {
 			return err
 		}
 	} else {
 		log.Println("no definition for Mutation found, skipping mutations.go generation")
 	}
-	if each := doc.Definitions.ForName("Query"); each != nil {
+	if each := doc.Definitions.ForName(g.queryType); each != nil {
 		if err := g.handleQueries(each); err != nil {
 			return err
 		}
@@ -164,6 +184,16 @@ func (g *Generator) mapScalar(name string) string {
 	}
 
 	return name
+}
+
+func (g *Generator) fieldNameForType(typeName string) string {
+	if unicode.IsUpper(rune(typeName[0])) {
+		return typeName
+	}
+	if typeName == "interface{}" {
+		return "ID"
+	}
+	return strcase.ToCamel(typeName)
 }
 
 func fieldName(s string) string {

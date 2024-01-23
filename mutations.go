@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path"
 	"text/template"
 
 	"github.com/iancoleman/strcase"
@@ -14,7 +15,7 @@ import (
 
 func (g *Generator) handleMutations(each *ast.Definition) error {
 	log.Println("generating mutations.go")
-	out, err := os.Create("mutations.go")
+	out, err := os.Create(path.Join(g.targetDirectory, "mutations.go"))
 	if err != nil {
 		return err
 	}

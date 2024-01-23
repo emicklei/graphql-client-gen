@@ -3,6 +3,7 @@ package gcg
 import (
 	"log"
 	"os"
+	"path"
 	"text/template"
 
 	"github.com/vektah/gqlparser/ast"
@@ -10,7 +11,7 @@ import (
 
 func (g *Generator) handleEnums(all []*ast.Definition) error {
 	log.Println("generating enums.go")
-	out, err := os.Create("enums.go")
+	out, err := os.Create(path.Join(g.targetDirectory, "enums.go"))
 	if err != nil {
 		return err
 	}

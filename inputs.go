@@ -3,6 +3,7 @@ package gcg
 import (
 	"log"
 	"os"
+	"path"
 	"text/template"
 
 	"github.com/vektah/gqlparser/ast"
@@ -10,7 +11,7 @@ import (
 
 func (g *Generator) handleInputs(doc *ast.SchemaDocument, all []*ast.Definition) error {
 	log.Println("generating inputs.go")
-	out, err := os.Create("inputs.go")
+	out, err := os.Create(path.Join(g.targetDirectory, "inputs.go"))
 	if err != nil {
 		return err
 	}
