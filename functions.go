@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"text/template"
 
 	"github.com/vektah/gqlparser/ast"
@@ -21,7 +22,7 @@ type Function struct {
 
 func (g *Generator) handleFunctions() error {
 	log.Println("generating functions.go")
-	out, err := os.Create("functions.go")
+	out, err := os.Create(path.Join(g.targetDirectory, "functions.go"))
 	if err != nil {
 		return err
 	}

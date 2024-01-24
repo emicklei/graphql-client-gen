@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"text/template"
 
 	"github.com/iancoleman/strcase"
@@ -13,7 +14,7 @@ import (
 
 func (g *Generator) handleQueries(def *ast.Definition) error {
 	log.Println("generating queries.go")
-	out, err := os.Create("queries.go")
+	out, err := os.Create(path.Join(g.targetDirectory, "queries.go"))
 	if err != nil {
 		return err
 	}
@@ -28,12 +29,17 @@ func (g *Generator) handleQueries(def *ast.Definition) error {
 		return err
 	}
 	for _, each := range def.Fields {
+		// skip fields of type Query
+		if each.Type.Name() == g.queryType {
+			continue
+		}
 		op := OperationData{
-			Comment:      formatComment(each.Description),
-			FunctionName: strcase.ToCamel(each.Name),
-			ReturnType:   g.mapScalar(each.Type.Name()),
-			IsArray:      isArray(each.Type), // refers to the Data field
-			ErrorsTag:    "`json:\"errors\"`",
+			Comment:         formatComment(each.Description),
+			FunctionName:    strcase.ToCamel(each.Name),
+			ReturnType:      g.mapScalar(each.Type.Name()),
+			ReturnFieldName: g.fieldNameForType(each.Type.Name()),
+			IsArray:         isArray(each.Type), // refers to the Data field
+			ErrorsTag:       "`json:\"errors\"`",
 		}
 		// build return field tag
 		// `graphql:"Tweet(id: $id)" json:"Tweet"`

@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"text/template"
 
 	"github.com/vektah/gqlparser/ast"
 )
 
 func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
-	out, err := os.Create("types.go")
+	out, err := os.Create(path.Join(g.targetDirectory, "types.go"))
 	if err != nil {
 		return err
 	}
@@ -25,10 +26,10 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 		BuildVersion: g.mainVersion,
 	}
 	for _, each := range doc.Definitions {
-		if each.Name == "Mutation" {
+		if each.Name == g.mutationType {
 			continue
 		}
-		if each.Name == "Query" {
+		if each.Name == g.queryType {
 			continue
 		}
 		if each.Kind == ast.Enum {
@@ -44,6 +45,10 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 				td.TypenameTag = "`graphql:\"__typename\" json:\"__typename,omitempty\"`"
 			}
 			for _, other := range withInheritedFields(doc, each) {
+				// skip field that refers to query
+				if other.Type.Name() == g.queryType {
+					continue
+				}
 				// is direct field or query
 				if len(other.Arguments) > 0 {
 					functionType := each.Name + fieldName(other.Name) + "Field"

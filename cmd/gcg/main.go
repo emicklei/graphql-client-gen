@@ -4,7 +4,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 
@@ -43,7 +42,7 @@ func readConfig() *Config {
 
 	if configFile != "" {
 		// Parse the configuration
-		data, err := ioutil.ReadFile(configFile)
+		data, err := os.ReadFile(configFile)
 		if err != nil {
 			log.Fatalln(err)
 		}

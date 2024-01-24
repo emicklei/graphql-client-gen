@@ -23,7 +23,7 @@ type {{.FunctionName}}Query struct {
 }
 
 type {{.FunctionName}}QueryData struct {
-	{{.ReturnType}} {{.ReturnFieldTag}}
+	{{.ReturnFieldName}} {{.ReturnFieldTag}}
 }
 
 // Build returns a GraphQLRequest with all the parts to send the HTTP request.

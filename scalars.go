@@ -2,13 +2,14 @@ package gcg
 
 import (
 	"os"
+	"path"
 	"text/template"
 
 	"github.com/vektah/gqlparser/ast"
 )
 
 func (g *Generator) handleScalars(all []*ast.Definition) error {
-	out, err := os.Create("scalars.go")
+	out, err := os.Create(path.Join(g.targetDirectory, "scalars.go"))
 	if err != nil {
 		return err
 	}
