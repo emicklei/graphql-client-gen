@@ -29,6 +29,10 @@ func (g *Generator) handleQueries(def *ast.Definition) error {
 		return err
 	}
 	for _, each := range def.Fields {
+		// skip fields of type Query
+		if each.Type.Name() == g.queryType {
+			continue
+		}
 		op := OperationData{
 			Comment:         formatComment(each.Description),
 			FunctionName:    strcase.ToCamel(each.Name),

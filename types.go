@@ -45,6 +45,10 @@ func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
 				td.TypenameTag = "`graphql:\"__typename\" json:\"__typename,omitempty\"`"
 			}
 			for _, other := range withInheritedFields(doc, each) {
+				// skip field that refers to query
+				if other.Type.Name() == g.queryType {
+					continue
+				}
 				// is direct field or query
 				if len(other.Arguments) > 0 {
 					functionType := each.Name + fieldName(other.Name) + "Field"
