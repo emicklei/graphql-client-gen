@@ -25,6 +25,7 @@ type Generator struct {
 	scalarBindings []ScalarBinding
 	mainVersion    string
 	schemaVersion  string
+	outputFolder   string
 }
 
 func NewGenerator(schemaSource string, options ...Option) *Generator {

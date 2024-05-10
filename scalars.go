@@ -1,6 +1,7 @@
 package gcg
 
 import (
+	"fmt"
 	"os"
 	"text/template"
 
@@ -8,7 +9,7 @@ import (
 )
 
 func (g *Generator) handleScalars(all []*ast.Definition) error {
-	out, err := os.Create("scalars.go")
+	out, err := os.Create(fmt.Sprintf("%sscalars.go", g.outputFolder))
 	if err != nil {
 		return err
 	}

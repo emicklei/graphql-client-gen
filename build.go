@@ -14,7 +14,7 @@ var buildSource string
 
 func (g *Generator) handleBuildTools() error {
 
-	out, err := os.Create("build.go")
+	out, err := os.Create(fmt.Sprintf("%sbuild.go", g.outputFolder))
 	if err != nil {
 		return err
 	}

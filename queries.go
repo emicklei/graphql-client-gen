@@ -13,7 +13,7 @@ import (
 
 func (g *Generator) handleQueries(def *ast.Definition) error {
 	log.Println("generating queries.go")
-	out, err := os.Create("queries.go")
+	out, err := os.Create(fmt.Sprintf("%squeries.go", g.outputFolder))
 	if err != nil {
 		return err
 	}

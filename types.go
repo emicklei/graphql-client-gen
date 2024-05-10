@@ -11,7 +11,7 @@ import (
 )
 
 func (g *Generator) handleTypes(doc *ast.SchemaDocument) error {
-	out, err := os.Create("types.go")
+	out, err := os.Create(fmt.Sprintf("%stypes.go", g.outputFolder))
 	if err != nil {
 		return err
 	}

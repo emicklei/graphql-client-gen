@@ -1,6 +1,7 @@
 package gcg
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"text/template"
@@ -10,7 +11,7 @@ import (
 
 func (g *Generator) handleEnums(all []*ast.Definition) error {
 	log.Println("generating enums.go")
-	out, err := os.Create("enums.go")
+	out, err := os.Create(fmt.Sprintf("%senums.go", g.outputFolder))
 	if err != nil {
 		return err
 	}
