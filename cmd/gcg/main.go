@@ -21,6 +21,7 @@ type Config struct {
 	SchemaFile     string            `yaml:"schema"`
 	PackageName    string            `yaml:"package"`
 	ScalarBindings map[string]string `yaml:"bindings"`
+	OutputFolder   string            `yaml:"output_folder"`
 }
 
 func readConfig() *Config {
@@ -39,7 +40,7 @@ func readConfig() *Config {
 		}
 	}
 
-	config := Config{"schema.gql", "generated", map[string]string{}}
+	config := Config{"schema.gql", "generated", map[string]string{}, ""}
 
 	if configFile != "" {
 		// Parse the configuration
@@ -69,7 +70,8 @@ func main() {
 	gen := gcg.NewGenerator(string(data),
 		gcg.WithScalarBindings(config.ScalarBindings),
 		gcg.WithPackage(config.PackageName),
-		gcg.WithSource(config.SchemaFile))
+		gcg.WithSource(config.SchemaFile),
+		gcg.WithOutputFolder(config.OutputFolder))
 
 	err = gen.Generate()
 	if err != nil {

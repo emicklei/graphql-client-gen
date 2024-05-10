@@ -1,6 +1,7 @@
 package gcg
 
 import (
+	"fmt"
 	"os"
 	"text/template"
 
@@ -14,7 +15,7 @@ and that the included types do not need to share any fields.
 **/
 
 func (g *Generator) handleUnions(doc *ast.SchemaDocument, all []*ast.Definition) error {
-	out, err := os.Create("unions.go")
+	out, err := os.Create(fmt.Sprintf("%sunions.go", g.outputFolder))
 	if err != nil {
 		return err
 	}

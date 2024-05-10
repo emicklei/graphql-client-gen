@@ -14,7 +14,7 @@ import (
 
 func (g *Generator) handleMutations(each *ast.Definition) error {
 	log.Println("generating mutations.go")
-	out, err := os.Create("mutations.go")
+	out, err := os.Create(fmt.Sprintf("%smutations.go", g.outputFolder))
 	if err != nil {
 		return err
 	}

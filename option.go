@@ -22,3 +22,9 @@ func WithSource(filename string) func(*Generator) {
 		g.sourceFilename = filename
 	}
 }
+
+func WithOutputFolder(path string) func(*Generator) {
+	return func(g *Generator) {
+		g.outputFolder = path
+	}
+}

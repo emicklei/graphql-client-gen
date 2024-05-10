@@ -26,6 +26,13 @@ Create a configuration file `schema-generate.yaml` with the following contents:
 	# optionally, map Scalar to your own implementation
 	bindings:
   		Date: CustomDate
+	
+	# optional: provide a folder to output the generated files to.
+	# note - this folder must already exist, path is relative to config
+	# file location
+	# 
+	# trailing slash is required for formatting
+	output_folder: pkg/generated/
 
 ## run
 

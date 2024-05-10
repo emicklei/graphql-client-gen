@@ -21,7 +21,7 @@ type Function struct {
 
 func (g *Generator) handleFunctions() error {
 	log.Println("generating functions.go")
-	out, err := os.Create("functions.go")
+	out, err := os.Create(fmt.Sprintf("%sfunctions.go", g.outputFolder))
 	if err != nil {
 		return err
 	}
