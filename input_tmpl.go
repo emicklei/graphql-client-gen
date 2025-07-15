@@ -19,7 +19,7 @@ var (
 {{- range .Fields}}
 // {{.JSONName}}:{{.GraphType}} {{if .Deprecated}}@deprecated{{end}}
 {{- end}}
-type {{.Name}} map[string]interface{}
+type {{.Name}} map[string]any
 
 {{- range .Fields}}
 {{- if gt (len .Comment) 0}}
@@ -32,7 +32,7 @@ func (i {{.StructName}}) {{.Name}}(v {{if .Optional}} *{{else}} {{end}}{{if .IsA
 {{- end}}
 
 func (i {{.Name}}) MarshalJSON() ([]byte, error) {
-	return json.Marshal(map[string]interface{}(i))
+	return json.Marshal(map[string]any(i))
 }
 
 {{- end}}

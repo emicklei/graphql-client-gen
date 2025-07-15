@@ -1,6 +1,0 @@
-dist: bionic
-language: go
-go: 
- - 1.17.x
-script:
-- go test -cover ./...

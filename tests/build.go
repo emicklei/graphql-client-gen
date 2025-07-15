@@ -1,6 +1,6 @@
 package tests
 
-// copied from build_source.go by github.com/emicklei/graphql-client-gen/cmd/gcg version: (devel)
+// copied from build_source.go by github.com/emicklei/graphql-client-gen/cmd/gcg version: v1.0.1+dirty
 // DO NOT EDIT
 
 import (
@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func buildRequest(mutationOrQuery string, operationName string, querySample interface{}, typedVars map[string]valueAndType) GraphQLRequest {
+func buildRequest(mutationOrQuery string, operationName string, querySample any, typedVars map[string]valueAndType) GraphQLRequest {
 	queryBody := new(bytes.Buffer)
 	writeQuery(querySample, queryBody, 0, false, typedVars)
 	body := queryBody.String()
@@ -29,12 +29,8 @@ func buildRequest(mutationOrQuery string, operationName string, querySample inte
 		}
 		fmt.Fprintf(signature, "$%s:%v", k, v.graphType)
 	}
-	vars := map[string]interface{}{}
+	vars := map[string]any{}
 	for k, v := range typedVars {
-		// do not include zero-valued variables	
-		if reflect.ValueOf(v.value).IsZero() {
-			continue
-		}
 		vars[k] = v.value
 	}
 	return GraphQLRequest{
@@ -44,7 +40,7 @@ func buildRequest(mutationOrQuery string, operationName string, querySample inte
 	}
 }
 
-func writeQuery(q interface{}, w io.Writer, indent int, inline bool, vars map[string]valueAndType) {
+func writeQuery(q any, w io.Writer, indent int, inline bool, vars map[string]valueAndType) {
 	rt := reflect.TypeOf(q)
 	rv := reflect.ValueOf(q)
 	if rt.Kind() == reflect.Ptr {
@@ -74,7 +70,9 @@ func writeQuery(q interface{}, w io.Writer, indent int, inline bool, vars map[st
 				k = k.Elem()
 				fv = fv.Elem()
 			}
-			if k.Kind() == reflect.Struct {
+			if k.Kind() == reflect.Slice && fv.Len() > 0 {
+				writeQuery(fv.Index(0).Interface(), w, indent, inline, vars)
+			} else if k.Kind() == reflect.Struct {
 				writeQuery(fv.Interface(), w, indent, inlineField, vars)
 			}
 		} else {
@@ -108,7 +106,7 @@ func writeField(sf reflect.StructField, fv reflect.Value, w io.Writer, indent in
 	io.WriteString(w, strings.Repeat("\t", indent))
 }
 
-func writeStruct(structValue interface{}, w io.Writer, indent int, inline bool, vars map[string]valueAndType) {
+func writeStruct(structValue any, w io.Writer, indent int, inline bool, vars map[string]valueAndType) {
 	if list := collectionFunctionArgs(structValue); len(list) > 0 {
 		io.WriteString(w, "(")
 		for i, each := range list {
@@ -154,11 +152,11 @@ func isZeroGraphQLStruct(v reflect.Value) bool {
 
 type valueAndType struct {
 	name      string
-	value     interface{}
+	value     any
 	graphType string
 }
 
-func collectionFunctionArgs(structValue interface{}) (list []valueAndType) {
+func collectionFunctionArgs(structValue any) (list []valueAndType) {
 	rt := reflect.TypeOf(structValue)
 	rv := reflect.ValueOf(structValue)
 	for i := 0; i < rt.NumField(); i++ {
@@ -178,14 +176,14 @@ func collectionFunctionArgs(structValue interface{}) (list []valueAndType) {
 
 // GraphQLRequest is used to model both a query or a mutation request
 type GraphQLRequest struct {
-	Query         string                 `json:"query"`
-	OperationName string                 `json:"operationName"`
-	Variables     map[string]interface{} `json:"variables"`
+	Query         string         `json:"query"`
+	OperationName string         `json:"operationName"`
+	Variables     map[string]any `json:"variables"`
 }
 
 // NewGraphQLRequest returns a new Request (for query or mutation) with optional or empty variables.
-func NewGraphQLRequest(query, operation string, vars ...map[string]interface{}) GraphQLRequest {
-	initVars := map[string]interface{}{}
+func NewGraphQLRequest(query, operation string, vars ...map[string]any) GraphQLRequest {
+	initVars := map[string]any{}
 	if len(vars) > 0 {
 		initVars = vars[0] // merge all?
 	}
@@ -199,5 +197,5 @@ type Error struct {
 		Line   int `json:"line"`
 		Column int `json:"column"`
 	} `json:"locations,omitempty"`
-	Extensions map[string]interface{} `json:"extensions,omitempty"`
+	Extensions map[string]any `json:"extensions,omitempty"`
 }

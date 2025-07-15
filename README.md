@@ -1,4 +1,3 @@
-![Travis (.com)](https://img.shields.io/travis/com/emicklei/graphql-client-gen)
 ![GitHub](https://img.shields.io/github/license/emicklei/graphql-client-gen)
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/emicklei/graphql-client-gen)
 

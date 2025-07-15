@@ -11,7 +11,7 @@ type Float float64
 type Boolean bool
 {{- if .IncludeScalarID}}
 // ID can by any type, typically a string or int64
-type ID interface{}
+type ID any
 {{- end }}
 
 {{- range .Scalars}}

@@ -24,7 +24,7 @@ func (g *Generator) handleScalars(all []*ast.Definition) error {
 	// unless it is defined by a binding
 	fd.IncludeScalarID = true
 	for _, each := range g.scalarBindings {
-		if each.GraphQLScalar == "ID" && each.GoTypeName != "interface{}" {
+		if each.GraphQLScalar == "ID" && each.GoTypeName != "any" {
 			fd.IncludeScalarID = false
 			break
 		}

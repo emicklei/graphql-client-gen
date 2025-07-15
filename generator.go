@@ -44,7 +44,7 @@ func NewGenerator(schemaSource string, options ...Option) *Generator {
 	// https://github.com/shurcooL/graphql/blob/master/scalar.go
 	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"Boolean", "bool"})
 	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"Float", "float64"})
-	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"ID", "interface{}"})
+	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"ID", "any"})
 	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"Int", "int32"})
 	g.scalarBindings = append(g.scalarBindings, ScalarBinding{"String", "string"})
 
